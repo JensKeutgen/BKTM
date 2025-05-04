@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funktionen-Memory</title>
+    <script src='https://cdn.plot.ly/plotly-3.0.1.min.js' charset="utf-8"></script>
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          options: {
+            skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            ignoreHtmlClass: 'tex2jax_ignore',
+            processHtmlClass: 'tex2jax_process'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <link rel="stylesheet" href="memory_style.css">
+</head>
+<body>
+
+    <h1>Funktionen-Memory</h1>
+
+    <div id="setupArea">
+        <h2>Spiel einrichten</h2>
+        <div>
+            <label for="pairCount">Anzahl der Paare (5-20):</label>
+            <input type="number" id="pairCount" min="5" max="20" value="8">
+        </div>
+        <div id="difficultySelection">
+            <span class="setup-label">Schwierigkeit:</span>
+            <input type="radio" id="diffEasy" name="difficulty" value="easy" checked>
+            <label for="diffEasy">Leicht (1 Parameter variiert)</label>
+            <input type="radio" id="diffMedium" name="difficulty" value="medium">
+            <label for="diffMedium">Mittel (2 Parameter variiert)</label>
+            <input type="radio" id="diffHard" name="difficulty" value="hard">
+            <label for="diffHard">Schwer (3 Parameter variiert)</label>
+        </div>
+        <button id="startGameBtn">Spiel starten</button>
+    </div>
+
+    <div id="gameArea" style="display: none;">
+        <div id="scoreboard">
+            <div id="player1Score" class="score">Spieler 1: 0</div>
+            <div id="activePlayerDisplay">Aktiver Spieler: 1</div>
+            <div id="player2Score" class="score">Spieler 2: 0</div>
+        </div>
+        <div id="gameBoard">
+            </div>
+
+        <div id="enlargedViewArea" style="display: none;">
+             <h3>Aktuell aufgedeckte Karten:</h3>
+             <div class="enlarged-content">
+                 <div id="enlargedSlot1" class="enlarged-slot"></div>
+                 <div id="enlargedSlot2" class="enlarged-slot"></div>
+             </div>
+        </div>
+    </div>
+
+    <div id="gameOverArea" style="display: none;">
+        <h2>Spiel beendet!</h2>
+        <p id="gameOverMessage"></p>
+        <button id="newGameBtn">Neues Spiel</button>
+    </div>
+
+    <script src="memory_script.js"></script>
+</body>
+</html>

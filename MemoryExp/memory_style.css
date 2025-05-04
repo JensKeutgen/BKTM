@@ -1,0 +1,292 @@
+/* Grundlegende Stile */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f0f8ff; /* Hellblau */
+    color: #333;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    color: #0056b3;
+}
+
+/* Setup Bereich */
+#setupArea {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: inline-block;
+    margin-bottom: 30px;
+    text-align: left; /* Bessere Ausrichtung für Labels */
+}
+#setupArea > div { /* Abstand zwischen den Setup-Zeilen */
+    margin-bottom: 15px;
+}
+#setupArea > div:last-child {
+    margin-bottom: 0;
+}
+
+.setup-label { /* Styling für Labels im Setup */
+    display: inline-block;
+    min-width: 100px; /* Einheitliche Breite */
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+#setupArea input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* NEU: Styling für Schwierigkeitsauswahl */
+#difficultySelection label {
+    margin-right: 15px; /* Abstand zwischen Optionen */
+    font-weight: normal; /* Normales Gewicht für Radio-Labels */
+}
+#difficultySelection input[type="radio"] {
+    margin-right: 5px;
+}
+
+
+#setupArea button, #gameOverArea button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    display: block; /* Button in neuer Zeile */
+    margin: 15px auto 0 auto; /* Zentrierung und Abstand oben */
+}
+
+#setupArea button:hover, #gameOverArea button:hover {
+    background-color: #218838;
+}
+
+/* Spiel Bereich */
+#gameArea {
+    margin-top: 20px;
+}
+
+/* Punktestand */
+#scoreboard {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    max-width: 1000px; /* Gleiche Breite wie Spielbrett */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.score {
+    flex: 1;
+    text-align: center;
+}
+
+#activePlayerDisplay {
+    flex: 1.5;
+    text-align: center;
+    color: #dc3545;
+    transition: color 0.3s ease;
+}
+
+#player1Score.active, #player2Score.active {
+    color: #dc3545;
+    font-weight: bolder;
+}
+
+
+/* Spielbrett */
+#gameBoard {
+    display: grid;
+    gap: 10px;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto 30px auto; /* Abstand nach unten */
+}
+
+/* Einzelne Karte */
+.card {
+    width: 130px;
+    height: 130px;
+    background-color: #007bff;
+    border: 2px solid #0056b3;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    perspective: 1000px;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.card-front {
+    background-color: #007bff;
+    color: white;
+    font-size: 2em;
+    line-height: 130px;
+}
+.card-front::after {
+    content: '?';
+}
+
+.card-back {
+    background-color: #ffffff;
+    color: black;
+    transform: rotateY(180deg);
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.card-back.equation {
+    font-size: 0.8em;
+    padding: 5px;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card.matched {
+    cursor: default;
+    opacity: 0.5;
+    border-color: #28a745;
+}
+
+.card.matched .card-inner {
+     transform: rotateY(180deg);
+}
+
+.card-back.graph .js-plotly-plot,
+.card-back.graph .plotly {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+}
+.card-back.graph .svg-container {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+
+/* Bereich für vergrößerte Ansicht */
+#enlargedViewArea {
+    margin: 30px auto 20px auto;
+    padding: 15px;
+    background-color: #fff;
+    border: 2px solid #6c757d; /* Grauer Rand */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 1000px; /* Gleiche Breite wie Spielbrett */
+}
+
+#enlargedViewArea h3 {
+    margin-top: 0;
+    color: #343a40;
+}
+
+.enlarged-content {
+    display: flex; /* Slots nebeneinander */
+    justify-content: space-around;
+    align-items: stretch; /* Slots gleich hoch machen */
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.enlarged-slot {
+    flex: 1; /* Nimmt Platz ein */
+    min-width: 350px; /* Mindestbreite für Lesbarkeit */
+    min-height: 350px; /* Mindesthöhe für Graphen */
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    display: flex; /* Zentrierung des Inhalts im Slot */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Inhalt darf nicht überlaufen */
+    transition: background-color 0.3s ease; /* Sanfter Übergang beim Leeren */
+}
+
+/* Styling, wenn Slot leer ist (optional) */
+.enlarged-slot:empty {
+    background-color: #e9ecef; /* Etwas dunkler, wenn leer */
+}
+
+
+/* Spezifisches Styling, wenn der Slot eine Gleichung enthält */
+.enlarged-slot.contains-equation {
+     font-size: 1.4em;
+     font-weight: bold;
+     text-align: center;
+}
+
+/* Spezifisches Styling, wenn der Slot einen Graph enthält */
+.enlarged-slot.contains-graph {
+    padding: 0; /* Kein Padding, damit Graph vollflächig ist */
+}
+
+.enlarged-slot .js-plotly-plot,
+.enlarged-slot .plotly {
+    width: 100% !important;
+    height: 100% !important;
+}
+.enlarged-slot .svg-container {
+     width: 100% !important;
+     height: 100% !important;
+}
+
+
+/* Spielende Bereich */
+#gameOverArea {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+#gameOverMessage {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #155724;
+    margin-bottom: 15px;
+}
