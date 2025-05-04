@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stochastik für Gestalter</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+</head>
+<body>
+    <div class="page-container">
+        <header class="script-header">
+             <h1>Stochastik für Gestalter</h1>
+             <a href="../../index.html" class="back-link">Zurück zur Übersicht</a>
+        </header>
+
+        <main>
+            <article class="script-content">
+
+                <section id="einleitung">
+                    <h2>Einleitung</h2>
+                    <p>
+                        Dieses Skript führt in ausgewählte Themen der Stochastik ein, mit einem besonderen Fokus auf Anwendungen im Bereich Gestaltung. Wahrscheinlichkeiten und statistische Methoden sind nützlich, um beispielsweise die Effektivität von Werbemaßnahmen zu bewerten, die Qualität von Druckerzeugnissen zu sichern oder Nutzerverhalten zu analysieren.
+                    </p>
+                    <p>Wir behandeln die folgenden Themen:</p>
+                    <ul>
+                        <li><span class="tooltip" data-tippy-content="Visualisierung mehrstufiger Zufallsexperimente.">Baumdiagramme</span> zur Visualisierung mehrstufiger Prozesse.</li>
+                        <li><span class="tooltip" data-tippy-content="Tabellarische Darstellung der gemeinsamen Häufigkeiten/Wahrscheinlichkeiten von zwei Merkmalen.">Vierfeldertafeln</span> zur Analyse von Zusammenhängen zweier Merkmale.</li>
+                        <li>Den <span class="tooltip" data-tippy-content="Formel zur Umkehrung bedingter Wahrscheinlichkeiten, um von einer beobachteten Wirkung auf die Wahrscheinlichkeit der Ursache zu schließen.">Satz von Bayes</span> zum Aktualisieren von Wahrscheinlichkeiten.</li>
+                        <li>Den <span class="tooltip" data-tippy-content="Gibt die Anzahl der Möglichkeiten an, k Objekte aus n ohne Beachtung der Reihenfolge auszuwählen.">Binomialkoeffizienten</span> für kombinatorische Fragen.</li>
+                        <li>Die <span class="tooltip" data-tippy-content="Wahrscheinlichkeitsfunktion für die Anzahl der Erfolge in einer Serie von n unabhängigen Bernoulli-Versuchen.">Binomialdichte</span> und die <span class="tooltip" data-tippy-content="Summierte Wahrscheinlichkeit für höchstens k Erfolge in einer Binomialverteilung.">kumulierte Binomialdichte</span> zur Analyse von Versuchsserien.</li>
+                    </ul>
+                     <p><small>Für Berechnungen zum Binomialkoeffizienten sowie zur Binomial- und kumulierten Binomialdichte wird explizit die Nutzung des Taschenrechners beschrieben.</small></p>
+                </section>
+
+                <section id="baumdiagramm">
+                    <h2>1 Baumdiagramm</h2>
+                    <h3>1.1 Erklärung</h3>
+                    <p>
+                        Ein <strong class="highlight tooltip" data-tippy-content="Grafische Darstellung mehrstufiger Zufallsexperimente.">Baumdiagramm</strong> ist eine grafische Methode, um mehrstufige Zufallsexperimente darzustellen. Jede Stufe entspricht einer Ebene von Verzweigungen. Knoten stellen Ereignisse dar, Äste die Übergänge mit ihren Wahrscheinlichkeiten. Oft sind dies <span class="tooltip" data-tippy-content="Wahrscheinlichkeit für Ereignis B, gegeben dass Ereignis A eingetreten ist: $P_A(B)$ oder $P(B|A)$.">bedingte Wahrscheinlichkeiten</span>. Die Summe der Wahrscheinlichkeiten von Ästen, die von einem Knoten ausgehen, ist 1.
+                    </p>
+                    <p>Zwei wichtige Regeln:</p>
+                    <ol>
+                        <li><strong>Pfadregel (Multiplikationsregel):</strong> Die Wahrscheinlichkeit eines Pfades (<span class="tooltip" data-tippy-content="Eine spezifische Abfolge von Ereignissen von der Wurzel bis zu einem Endknoten.">Endereignis</span>) ist das Produkt der Wahrscheinlichkeiten entlang des Pfades. Beispiel: $P(\text{A gefolgt von B}) = P(A) \cdot P_A(B)$.</li>
+                        <li><strong>Summenregel:</strong> Die Wahrscheinlichkeit eines Ereignisses, das über mehrere Pfade erreichbar ist, ist die Summe der Wahrscheinlichkeiten dieser Pfade.</li>
+                    </ol>
+
+                    <h3>1.2 Beispiel: Nutzerfluss Website</h3>
+                    <p>
+                        Ein Nutzer besucht eine Landingpage. Klick (K) mit $P(K)=0.3$, kein Klick ($\overline{K}$) mit $P(\overline{K})=0.7$. Nach Klick: Kaufabschluss (A) mit $P_K(A)=0.6$, Abbruch ($\overline{A}$) mit $P_K(\overline{A})=0.4$.
+                    </p>
+                    <figure>
+                         <img src="images/baumdiagramm_beispiel.png" alt="Baumdiagramm Beispiel Nutzerfluss">
+                         <figcaption>Abb. 1: Baumdiagramm zum Nutzerfluss-Beispiel.</figcaption>
+                    </figure>
+                    <p>Pfadwahrscheinlichkeiten:</p>
+                    <ul>
+                        <li>Klick und Abschluss: $P(K \cap A) = P(K) \cdot P_K(A) = 0.3 \cdot 0.6 = 0.18$.</li>
+                        <li>Klick und Abbruch: $P(K \cap \overline{A}) = P(K) \cdot P_K(\overline{A}) = 0.3 \cdot 0.4 = 0.12$.</li>
+                        <li>Kein Klick: $P(\overline{K}) = 0.7$.</li>
+                    </ul>
+                    <p>Die Wahrscheinlichkeit für einen Kaufabschluss ist $P(K \cap A) = 0.18$ (18%).</p>
+
+                    <h3>1.3 Aufgabe</h3>
+                    <p>
+                        Eine Druckerei prüft Plakate: 1. Druckqualität (D), 2. Schnitt (S).
+                        $P(D_G) = 0.95$, $P(D_S) = 0.05$.
+                        Bei guter Druckqualität: $P_{D_G}(S_K) = 0.98$, $P_{D_G}(S_F) = 0.02$.
+                        Bei schlechter Druckqualität: $P_{D_S}(S_K) = 0.80$, $P_{D_S}(S_F) = 0.20$.
+                    </p>
+                    <div class="question" data-question-id="baum_aufg">
+                        <p><strong>Verständnisfrage:</strong> Was bedeutet $P_{D_S}(S_K)$?</p>
+                        <label><input type="radio" name="q_baum_verst" value="a"> Die Wahrscheinlichkeit für schlechten Druck UND korrekten Schnitt.</label><br>
+                        <label><input type="radio" name="q_baum_verst" value="b"> Die Wahrscheinlichkeit für korrekten Schnitt, WENN der Druck schlecht war.</label><br>
+                        <label><input type="radio" name="q_baum_verst" value="c"> Die Wahrscheinlichkeit für schlechten Druck.</label><br>
+                        <div id="feedback-baum-verst" class="feedback-message" style="display: none; margin-top: 5px;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckTrueFalse('q_baum_verst', 'b', 'feedback-baum-verst', 'Richtig! Dies ist eine bedingte Wahrscheinlichkeit.', 'Falsch. $P_{D_S}(S_K)$ ist die *bedingte* Wahrscheinlichkeit für $S_K$ unter der Bedingung $D_S$.')">Antwort prüfen</button>
+                    </div>
+                     <div class="fill-blank-question">
+                        <p><strong>Berechnung der Pfadwahrscheinlichkeiten:</strong></p>
+                        <ul>
+                            <li>Guter Druck, Korrekter Schnitt ($D_G \cap S_K$): $P(D_G) \cdot P_{D_G}(S_K) = 0.95 \cdot 0.98 = $ <input type="text" id="luecke_baum_1" size="5" aria-label="Ergebnis DG und SK">.</li>
+                             <li>Guter Druck, Fehlerhafter Schnitt ($D_G \cap S_F$): $P(D_G) \cdot P_{D_G}(S_F) = 0.95 \cdot 0.02 = $ <input type="text" id="luecke_baum_2" size="5" aria-label="Ergebnis DG und SF">.</li>
+                            <li>Schlechter Druck, Korrekter Schnitt ($D_S \cap S_K$): $P(D_S) \cdot P_{D_S}(S_K) = 0.05 \cdot 0.80 = $ <input type="text" id="luecke_baum_3" size="5" aria-label="Ergebnis DS und SK">.</li>
+                             <li>Schlechter Druck, Fehlerhafter Schnitt ($D_S \cap S_F$): $P(D_S) \cdot P_{D_S}(S_F) = 0.05 \cdot 0.20 = $ <input type="text" id="luecke_baum_4" size="5" aria-label="Ergebnis DS und SF">.</li>
+                        </ul>
+                         <p><strong>Kontrolle:</strong> Die Summe aller Pfadwahrscheinlichkeiten muss 1 sein: <span id="baum_summe_check">?</span></p>
+                         <div id="feedback-baum-luecken" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankBaum()">Lücken prüfen</button>
+                    </div>
+                    <div id="matching-quiz-baum" style="margin-top: 20px;">
+                        <h4>Zuordnung: Ereignis zu Wahrscheinlichkeit</h4>
+                        <p>Ordne den Ereignissen (Pfaden) die zuvor berechneten Wahrscheinlichkeiten zu:</p>
+                        <form id="baum-zuordnung-form">
+                             <div class="matching-item">
+                                <label for="match_baum_1">Guter Druck & Korrekter Schnitt:</label>
+                                <select id="match_baum_1" name="match_baum_1">
+                                    <option value="">-- wählen --</option>
+                                    <option value="0.931">0.931</option>
+                                    <option value="0.019">0.019</option>
+                                    <option value="0.040">0.040</option>
+                                    <option value="0.010">0.010</option>
+                                </select>
+                            </div>
+                             <div class="matching-item">
+                                <label for="match_baum_2">Guter Druck & Fehler Schnitt:</label>
+                                <select id="match_baum_2" name="match_baum_2">
+                                     <option value="">-- wählen --</option>
+                                     <option value="0.931">0.931</option>
+                                    <option value="0.019">0.019</option>
+                                    <option value="0.040">0.040</option>
+                                    <option value="0.010">0.010</option>
+                                </select>
+                            </div>
+                             <div class="matching-item">
+                                <label for="match_baum_3">Schlechter Druck & Korrekter Schnitt:</label>
+                                <select id="match_baum_3" name="match_baum_3">
+                                     <option value="">-- wählen --</option>
+                                     <option value="0.931">0.931</option>
+                                    <option value="0.019">0.019</option>
+                                    <option value="0.040">0.040</option>
+                                    <option value="0.010">0.010</option>
+                                </select>
+                            </div>
+                             <div class="matching-item">
+                                <label for="match_baum_4">Schlechter Druck & Fehler Schnitt:</label>
+                                <select id="match_baum_4" name="match_baum_4">
+                                    <option value="">-- wählen --</option>
+                                    <option value="0.931">0.931</option>
+                                    <option value="0.019">0.019</option>
+                                    <option value="0.040">0.040</option>
+                                    <option value="0.010">0.010</option>
+                                </select>
+                            </div>
+                             <div id="feedback-baum-zuordnung" class="feedback-message" style="display: none; margin-top: 10px;"></div>
+                             <button type="button" class="quiz-button" onclick="handleCheckMatchingBaum()">Zuordnung prüfen</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="vierfeldertafel">
+                    <h2>2 Vierfeldertafel</h2>
+                    <h3>2.1 Erklärung</h3>
+                    <p>
+                        Eine <strong class="highlight tooltip" data-tippy-content="Tabelle zur Darstellung der gemeinsamen Häufigkeiten/Wahrscheinlichkeiten von zwei kategorialen Merkmalen.">Vierfeldertafel</strong> (oder Kontingenztafel) stellt die gemeinsamen Häufigkeiten oder Wahrscheinlichkeiten von zwei Merkmalen A und B (und ihren Gegenereignissen $\overline{A}, \overline{B}$) dar.
+                    </p>
+                    <table class="vierfeldertafel-erklaerung">
+                        <thead>
+                            <tr><th></th><th>Merkmal B</th><th>Merkmal $\overline{B}$</th><th>Gesamt</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th>Merkmal A</th><td>$P(A \cap B)$</td><td>$P(A \cap \overline{B})$</td><td>$P(A)$</td></tr>
+                            <tr><th>Merkmal $\overline{A}$</th><td>$P(\overline{A} \cap B)$</td><td>$P(\overline{A} \cap \overline{B})$</td><td>$P(\overline{A})$</td></tr>
+                            <tr><th>Gesamt</th><td>$P(B)$</td><td>$P(\overline{B})$</td><td>1</td></tr>
+                        </tbody>
+                    </table>
+                    <style>.vierfeldertafel-erklaerung { border-collapse: collapse; margin: 1em 0; } .vierfeldertafel-erklaerung th, .vierfeldertafel-erklaerung td { border: 1px solid var(--border-color); padding: 8px; text-align: center; } .vierfeldertafel-erklaerung th { background-color: #f1f1f1; } </style>
+                    <p>
+                        Die inneren Felder enthalten <span class="tooltip" data-tippy-content="Wahrscheinlichkeit, dass beide Merkmale A und B gleichzeitig auftreten, z.B. P(A und B).">Schnittwahrscheinlichkeiten</span> ($P(A \cap B)$). Die <span class="tooltip" data-tippy-content="Gesamtwahrscheinlichkeiten für die einzelnen Merkmalsausprägungen, z.B. P(A). Werden durch Addition der Zeilen/Spalten berechnet.">Randwahrscheinlichkeiten</span> ergeben sich durch Summation. Bedingte Wahrscheinlichkeiten lassen sich leicht berechnen, z.B. $P_B(A) = \frac{P(A \cap B)}{P(B)}$ (<span class="tooltip" data-tippy-content="Wahrscheinlichkeit von A unter der Bedingung, dass B bereits eingetreten ist.">Wahrscheinlichkeit von A gegeben B</span>).
+                    </p>
+
+                    <h3>2.2 Beispiel: Nutzeranalyse für Werbung</h3>
+                    <p>500 Nutzer befragt: Werbung gesehen (A), Produkt gekauft (B). Gegeben: $P(A) = 0.40$, $P(B) = 0.16$, $P(A \cap B) = 0.10$.</p>
+                    <p>Vervollständigte Tafel:</p>
+                     <table class="vierfeldertafel-erklaerung">
+                        <thead>
+                            <tr><th></th><th>Gekauft (B)</th><th>Nicht gekauft ($\overline{B}$)</th><th>Gesamt</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th>Werbung gesehen (A)</th><td>0.10</td><td>0.30</td><td>0.40</td></tr>
+                            <tr><th>Werbung nicht gesehen ($\overline{A}$)</th><td>0.06</td><td>0.54</td><td>0.60</td></tr>
+                            <tr><th>Gesamt</th><td>0.16</td><td>0.84</td><td>1.00</td></tr>
+                        </tbody>
+                    </table>
+                    <p>Bedingte Wahrscheinlichkeit: $P_A(B) = \frac{P(A \cap B)}{P(A)} = \frac{0.10}{0.40} = 0.25$. Die Kaufwahrscheinlichkeit steigt von 16% auf 25%, wenn die Werbung gesehen wurde.</p>
+
+                    <h3>2.3 Aufgabe</h3>
+                    <p>
+                        Zwei Plotter: P1 (60%), P2 (40%). Fehlerrate F: $P_{P1}(F)=0.05$, $P_{P2}(F)=0.10$.
+                        Nicht-Fehlerraten: $P_{P1}(\overline{F}) = 1 - 0.05 = 0.95$, $P_{P2}(\overline{F}) = 1 - 0.10 = 0.90$.
+                    </p>
+                    <div class="fill-blank-question">
+                        <p><strong>Frage 1:</strong> Berechne die Schnittwahrscheinlichkeiten:</p>
+                        <ul>
+                            <li>$P(P1 \cap F) = P(P1) \cdot P_{P1}(F) = 0.6 \cdot 0.05 = $ <input type="text" id="luecke_vft_1" size="5" aria-label="Ergebnis P1 und F"></li>
+                            <li>$P(P1 \cap \overline{F}) = P(P1) \cdot P_{P1}(\overline{F}) = 0.6 \cdot 0.95 = $ <input type="text" id="luecke_vft_2" size="5" aria-label="Ergebnis P1 und nicht F"></li>
+                            <li>$P(P2 \cap F) = P(P2) \cdot P_{P2}(F) = 0.4 \cdot 0.10 = $ <input type="text" id="luecke_vft_3" size="5" aria-label="Ergebnis P2 und F"></li>
+                             <li>$P(P2 \cap \overline{F}) = P(P2) \cdot P_{P2}(\overline{F}) = 0.4 \cdot 0.90 = $ <input type="text" id="luecke_vft_4" size="5" aria-label="Ergebnis P2 und nicht F"></li>
+                        </ul>
+                         <p><strong>Frage 2:</strong> Berechne die Randwahrscheinlichkeiten:</p>
+                         <ul>
+                             <li>$P(F) = P(P1 \cap F) + P(P2 \cap F) = $ <input type="text" id="luecke_vft_5" size="5" aria-label="Gesamte Fehlerrate P(F)"></li>
+                             <li>$P(\overline{F}) = P(P1 \cap \overline{F}) + P(P2 \cap \overline{F}) = $ <input type="text" id="luecke_vft_6" size="5" aria-label="Gesamte Nicht-Fehlerrate P(nicht F)"></li>
+                             <li>$P(P1) = P(P1 \cap F) + P(P1 \cap \overline{F}) = $ <input type="text" id="luecke_vft_7" size="5" aria-label="Randwahrscheinlichkeit P(P1)"> (Kontrolle)</li>
+                             <li>$P(P2) = P(P2 \cap F) + P(P2 \cap \overline{F}) = $ <input type="text" id="luecke_vft_8" size="5" aria-label="Randwahrscheinlichkeit P(P2)"> (Kontrolle)</li>
+                         </ul>
+                         <div id="feedback-vft-luecken" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankVFT()">Lücken prüfen</button>
+                    </div>
+                    <div class="question" data-question-id="vft_mc" style="margin-top: 20px;">
+                        <p><strong>Frage 3:</strong> Welche Wahrscheinlichkeit beschreibt den Anteil aller Drucke, die von Plotter 1 stammen und <strong>nicht</strong> fehlerhaft sind?</p>
+                        <label><input type="radio" name="q_vft_mc" value="a"> $P(P1)$</label><br>
+                        <label><input type="radio" name="q_vft_mc" value="b"> $P(\overline{F})$</label><br>
+                        <label><input type="radio" name="q_vft_mc" value="c"> $P(P1 \cap \overline{F})$</label><br>
+                         <label><input type="radio" name="q_vft_mc" value="d"> $P_{P1}(\overline{F})$</label><br>
+                        <div id="feedback-vft-mc" class="feedback-message" style="display: none; margin-top: 5px;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckVFTMC()">Antwort prüfen</button>
+                    </div>
+                </section>
+
+                 <section id="bayes">
+                    <h2>3 Satz von Bayes</h2>
+                    <h3>3.1 Erklärung</h3>
+                    <p>
+                        Der <strong class="highlight tooltip" data-tippy-content="Mathematischer Satz, der die bedingte Wahrscheinlichkeit P(A|B) mit der umgekehrten bedingten Wahrscheinlichkeit P(B|A) in Beziehung setzt.">Satz von Bayes</strong> erlaubt es, bedingte Wahrscheinlichkeiten "umzukehren". Man schließt von einer beobachteten Wirkung (B, z.B. ein Symptom oder ein Testergebnis) auf die Wahrscheinlichkeit der Ursache (A, z.B. eine Krankheit oder ein Zustand).
+                    </p>
+                    <p>Formel: $$P_B(A) = \frac{P_A(B) \cdot P(A)}{P(B)}$$</p>
+                    <ul>
+                        <li>$P(A)$: <span class="tooltip" data-tippy-content="Unsere 'Vorab'-Annahme über die Wahrscheinlichkeit von A, *bevor* wir wissen, ob B eingetreten ist.">A-priori-Wahrscheinlichkeit</span> von A.</li>
+                        <li>$P_A(B)$: <span class="tooltip" data-tippy-content="Wie wahrscheinlich ist die Wirkung B, *wenn* Ursache A vorliegt? Oft auch als 'Likelihood' bezeichnet.">Wahrscheinlichkeit von B, gegeben A</span> ist wahr.</li>
+                        <li>$P(B)$: <span class="tooltip" data-tippy-content="Gesamtwahrscheinlichkeit von B, über alle möglichen Ursachen hinweg. Fungiert als Normierung. Oft berechnet über den Satz der totalen Wahrscheinlichkeit: $P(B) = P_A(B)P(A) + P_{\overline{A}}(B)P(\overline{A})$.">Totale Wahrscheinlichkeit</span> von B.</li>
+                        <li>$P_B(A)$: <span class="tooltip" data-tippy-content="Unsere aktualisierte Annahme über die Wahrscheinlichkeit von A, *nachdem* wir beobachtet haben, dass B eingetreten ist.">A-posteriori-Wahrscheinlichkeit</span> von A.</li>
+                    </ul>
+
+                    <h3>3.2 Beispiel: A/B-Testing Interpretation</h3>
+                    <p>Layout A $(P(A)=0.5)$ vs. Layout B $(P(B_{Layout})=0.5)$. Konversionsrate (K): $P_A(K)=0.10$, $P_{B_{Layout}}(K)=0.15$. Ein Nutzer hat konvertiert (K beobachtet). Gesucht: $P_K(A)$ (Wahrscheinlichkeit, dass der konvertierende Nutzer Layout A sah).</p>
+                    <ol>
+                        <li>Totale Wahrscheinlichkeit $P(K) = P_A(K)P(A) + P_{B_{Layout}}(K)P(B_{Layout}) = (0.10 \cdot 0.5) + (0.15 \cdot 0.5) = 0.05 + 0.075 = 0.125$.</li>
+                        <li>Satz von Bayes: $P_K(A) = \frac{P_A(K)P(A)}{P(K)} = \frac{0.10 \cdot 0.5}{0.125} = \frac{0.05}{0.125} = 0.4$.</li>
+                    </ol>
+                    <p>Obwohl beide Layouts gleich oft gezeigt wurden, ist die Wahrscheinlichkeit nur 40%, dass ein *konvertierender* Nutzer Layout A sah.</p>
+
+                    <h3>3.3 Aufgabe</h3>
+                    <p>Verwende die Daten aus der Vierfeldertafel-Aufgabe (2.3): $P(P1)=0.6$, $P(P2)=0.4$, $P_{P1}(F)=0.05$, $P_{P2}(F)=0.10$. Ein fehlerhafter Druck (F) wurde reklamiert. Wir wollen wissen, welcher Plotter wahrscheinlicher die Ursache ist.</p>
+                     <div class="fill-blank-question">
+                         <p><strong>Frage 1:</strong> Berechne die totale Wahrscheinlichkeit für einen Fehler, $P(F)$ (falls noch nicht geschehen):<br>
+                         $P(F) = P_{P1}(F) \cdot P(P1) + P_{P2}(F) \cdot P(P2) = (0.05 \cdot 0.6) + (0.10 \cdot 0.4) = $
+                         <input type="text" id="luecke_bayes_0" size="5" aria-label="Ergebnis P(F)">
+                         </p>
+                         <p><strong>Frage 2:</strong> Berechne mit dem Satz von Bayes die Wahrscheinlichkeit, dass dieser fehlerhafte Druck von Plotter 1 stammt:
+                         $P_F(P1) = \frac{P_{P1}(F) \cdot P(P1)}{P(F)} = \frac{0.05 \cdot 0.6}{P(F)} \approx $
+                         <input type="text" id="luecke_bayes_1" size="5" aria-label="Ergebnis P(P1 | F)"> (auf 3 Nachkommastellen runden)
+                         </p>
+                          <p><strong>Frage 3:</strong> Berechne die Wahrscheinlichkeit, dass der fehlerhafte Druck von Plotter 2 stammt:
+                         $P_F(P2) = \frac{P_{P2}(F) \cdot P(P2)}{P(F)} = \frac{0.10 \cdot 0.4}{P(F)} \approx $
+                         <input type="text" id="luecke_bayes_2" size="5" aria-label="Ergebnis P(P2 | F)"> (auf 3 Nachkommastellen runden)
+                         </p>
+                         <p>Kontrolle: $P_F(P1) + P_F(P2) \approx$ <span id="bayes_summe">?</span> (Sollte 1 ergeben)</p>
+                         <div id="feedback-bayes-luecken" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankBayes()">Lücken prüfen</button>
+                     </div>
+                 </section>
+
+                <section id="binomialkoeffizient">
+                    <h2>4 Binomialkoeffizient</h2>
+                    <h3>4.1 Erklärung</h3>
+                    <p>
+                        Der <strong class="highlight tooltip" data-tippy-content="Gibt die Anzahl der Möglichkeiten an, k Elemente aus einer Menge von n Elementen ohne Zurücklegen und ohne Beachtung der Reihenfolge auszuwählen.">Binomialkoeffizient</strong> $\binom{n}{k}$ ("n über k") gibt die Anzahl der Möglichkeiten an, $k$ Objekte aus einer Menge von $n$ verschiedenen Objekten auszuwählen, ohne Zurücklegen und ohne Beachtung der Reihenfolge (<span class="tooltip" data-tippy-content="Eine Auswahl, bei der die Reihenfolge keine Rolle spielt. {A, B} ist die gleiche Kombination wie {B, A}.">Kombinationen</span>).
+                    </p>
+                    <p>Formel: $$\binom{n}{k} = \frac{n!}{k! \cdot (n-k)!}$$</p>
+                    <p>Hierbei ist $n! = n \cdot (n-1) \cdot \dots \cdot 2 \cdot 1$ (<span class="tooltip" data-tippy-content="Produkt aller natürlichen Zahlen von 1 bis n. Beispiel: 4! = 4*3*2*1 = 24.">n-Fakultät</span>) und per Definition $0! = 1$. Es gilt $0 \le k \le n$.</p>
+
+                    <h3>4.2 Beispiel: Farbauswahl</h3>
+                    <p>
+                        Auswahl von $k=3$ Farben aus einer Palette von $n=8$ Farben. Die Reihenfolge spielt keine Rolle. Gesucht: $\binom{8}{3}$.
+                        Mit Taschenrechner (nCr-Funktion): $\binom{8}{3} = 56$. Es gibt 56 mögliche Farbkombinationen.
+                    </p>
+
+                    <h3>4.3 Aufgabe</h3>
+                    <p>
+                        Für ein Fotoshooting sollen aus $n=12$ Models genau $k=5$ ausgewählt werden. Wie viele verschiedene Gruppen sind möglich? Berechnen Sie $\binom{12}{5}$ mit der nCr-Funktion Ihres Taschenrechners.
+                    </p>
+                    <div class="fill-blank-question">
+                        <p>$\binom{12}{5} = $ <input type="text" id="luecke_binokoeff" size="6" aria-label="Ergebnis 12 über 5"></p>
+                        <div id="feedback-binokoeff" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankSingle('luecke_binokoeff', '792', 'feedback-binokoeff', 'Richtig! $\\binom{12}{5} = 792$', 'Falsch. Benutze die nCr-Funktion deines Taschenrechners (meist unter MATH oder PROB).')">Antwort prüfen</button>
+                    </div>
+
+                    <div id="flashcards-kombinatorik" style="margin-top: 30px;">
+                        <h4>Lernspiel: Begriffe der Kombinatorik</h4>
+                        <div class="flashcard-controls">
+                             <button onclick="prevFlashcard()" id="prev-komb-card-btn" disabled>&larr; Vorherige</button>
+                             <span id="komb-card-counter">Karte 1 / X</span>
+                             <button onclick="nextFlashcard()" id="next-komb-card-btn">Nächste &rarr;</button>
+                        </div>
+                        <div class="flashcard-container">
+                             <div class="flashcard" id="komb-flashcard" onclick="flipFlashcard(this)" title="Klicken zum Umdrehen">
+                                <div class="flashcard-front">Begriff lädt...</div>
+                                <div class="flashcard-back">Definition lädt...</div>
+                            </div>
+                        </div>
+                        <div id="feedback-flashcard-komb" class="feedback-message" style="display: none;"></div>
+                    </div>
+                </section>
+
+                <section id="binomialdichte">
+                    <h2>5 Binomialdichte (Binomial-Wahrscheinlichkeitsfunktion)</h2>
+                    <h3>5.1 Erklärung</h3>
+                    <p>
+                        Die <strong class="highlight tooltip" data-tippy-content="Eine diskrete Wahrscheinlichkeitsverteilung, die die Anzahl der Erfolge in einer festen Anzahl von unabhängigen Bernoulli-Experimenten beschreibt.">Binomialverteilung</strong> modelliert Zufallsexperimente (sog. <span class="tooltip" data-tippy-content="Eine Serie von unabhängigen Versuchen mit jeweils nur zwei möglichen Ausgängen (Erfolg/Misserfolg) und konstanter Erfolgswahrscheinlichkeit.">Bernoulli-Prozess</span>), die folgende Bedingungen erfüllen:
+                    </p>
+                    <ul>
+                        <li>$n$ feste, <span class="tooltip" data-tippy-content="Das Ergebnis eines Versuchs beeinflusst nicht das Ergebnis der anderen Versuche.">unabhängige</span> Wiederholungen (Versuche).</li>
+                        <li>Genau zwei mögliche Ausgänge pro Versuch ("Erfolg" / "Misserfolg").</li>
+                        <li>Konstante <span class="tooltip" data-tippy-content="Die Wahrscheinlichkeit, dass der gewünschte Ausgang ('Erfolg') bei einem einzelnen Versuch eintritt.">Erfolgswahrscheinlichkeit</span> $p$.</li>
+                        <li>Misserfolgswahrscheinlichkeit $q = 1-p$.</li>
+                    </ul>
+                    <p>Die Zufallsgröße $X$ zählt die Anzahl der Erfolge (mögliche Werte $k = 0, 1, \dots, n$).</p>
+                    <p>
+                        Die <strong class="highlight tooltip" data-tippy-content="Funktion, die für jeden möglichen Wert k (Anzahl Erfolge) die Wahrscheinlichkeit P(X=k) angibt.">Binomialdichte</strong> (oder Binomial-Wahrscheinlichkeitsfunktion) $P(X=k)$ oder $B(n;p;k)$ gibt die Wahrscheinlichkeit für genau $k$ Erfolge an.
+                    </p>
+                    <p>Formel: $$P(X=k) = B(n;p;k) = \underbrace{\binom{n}{k}}_{\text{Anzahl Wege}} \cdot \underbrace{p^k}_{\text{k Erfolge}} \cdot \underbrace{(1-p)^{n-k}}_{\text{n-k Misserfolge}}$$</p>
+
+                    <h3>5.2 Beispiel: Fehlerhafte Drucke</h3>
+                    <p>
+                        Fehlerwahrscheinlichkeit $p=0.05$. $n=20$ Seiten gedruckt. Wie hoch ist die Wahrscheinlichkeit für genau $k=2$ fehlerhafte Seiten?
+                        Gesucht: $P(X=2) = B(20; 0.05; 2)$.
+                        Mit Taschenrechner (z.B. binompdf(20, 0.05, 2)): $P(X=2) \approx 0.1887$ (ca. 18.9%).
+                    </p>
+
+                    <h3>5.3 Aufgabe</h3>
+                    <p>
+                        Umfrage unter $n=50$ Kunden. Wahrscheinlichkeit, dass ein Kunde ein Design mag (Erfolg) ist $p=0.7$.
+                        Berechnen Sie die Wahrscheinlichkeit, dass genau $k=30$ Kunden das Design mögen. Nutzen Sie die entsprechende Funktion (oft binompdf oder Bpd) Ihres Taschenrechners.
+                    </p>
+                     <div class="fill-blank-question">
+                        <p>$P(X=30) = B(50; 0.7; 30) \approx $ <input type="text" id="luecke_binodichte" size="8" aria-label="Ergebnis B(50, 0.7, 30)"> (auf 4 Nachkommastellen runden)</p>
+                        <div id="feedback-binodichte" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankSingle('luecke_binodichte', '0.0475', 'feedback-binodichte', 'Richtig! $B(50; 0.7; 30) \\approx 0.0475$', 'Falsch. Prüfe die Eingabe in deinen Taschenrechner (Parameter: n=50, p=0.7, k=30; Funktion: binompdf/Bpd).')">Antwort prüfen</button>
+                    </div>
+                </section>
+
+                <section id="kumulierte-binomialdichte">
+                    <h2>6 Kumulierte Binomialdichte</h2>
+                    <h3>6.1 Erklärung</h3>
+                    <p>
+                        Oft interessiert die Wahrscheinlichkeit für Intervalle wie "<span class="tooltip" data-tippy-content="Die Anzahl der Erfolge ist kleiner oder gleich k.">höchstens k Erfolge</span>" oder "<span class="tooltip" data-tippy-content="Die Anzahl der Erfolge ist größer oder gleich k.">mindestens k Erfolge</span>". Dafür nutzt man die <strong class="highlight tooltip" data-tippy-content="Funktion F(k) = P(X <= k), die die Wahrscheinlichkeit angibt, dass die Zufallsgröße X höchstens den Wert k annimmt.">kumulierte Binomialverteilungsfunktion</strong> (oder Verteilungsfunktion) $F(n;p;k)$.
+                    </p>
+                    <p>Formel: $$P(X \le k) = F(n;p;k) = \sum_{i=0}^{k} P(X=i) = \sum_{i=0}^{k} B(n;p;i) = \sum_{i=0}^{k} \binom{n}{i} p^i (1-p)^{n-i}$$</p>
+                    <p>Berechnung anderer Intervalle (mit Taschenrechnerfunktion, oft binomcdf oder Bcd, die $P(X \le k)$ berechnet):</p>
+                    <ul>
+                        <li>Höchstens k Erfolge: $P(X \le k)$ (direkt mit binomcdf(n, p, k))</li>
+                        <li>Weniger als k Erfolge: $P(X < k) = P(X \le k-1)$ (binomcdf(n, p, k-1))</li>
+                        <li>Mindestens k Erfolge: $P(X \ge k) = 1 - P(X \le k-1)$ (1 - binomcdf(n, p, k-1))</li>
+                        <li>Mehr als k Erfolge: $P(X > k) = 1 - P(X \le k)$ (1 - binomcdf(n, p, k))</li>
+                        <li>Zwischen $k_1$ und $k_2$ (inkl.): $P(k_1 \le X \le k_2) = P(X \le k_2) - P(X \le k_1 - 1)$ (binomcdf(n, p, k2) - binomcdf(n, p, k1-1))</li>
+                    </ul>
+
+                    <h3>6.2 Beispiel: Nutzerzufriedenheit</h3>
+                    <p>$n=100$ Tester, Erfolgswahrscheinlichkeit (intuitiv) $p=0.8$.</p>
+                    <ul>
+                        <li>Höchstens 85 Erfolge: $P(X \le 85) = F(100; 0.8; 85)$. Mit TR (binomcdf(100, 0.8, 85)): $\approx 0.9102$.</li>
+                        <li>Mindestens 75 Erfolge: $P(X \ge 75) = 1 - P(X \le 74)$. Mit TR (binomcdf(100, 0.8, 74)): $\approx 0.0876$. Ergebnis: $1 - 0.0876 = 0.9124$.</li>
+                    </ul>
+
+                    <h3>6.3 Aufgabe</h3>
+                    <p>
+                        Webshop: $p=0.15$ der Kunden brechen Kauf ab (Abbruch = Erfolg). $n=80$ Kunden legen Produkt in Warenkorb. Berechnen Sie mit dem Taschenrechner (Funktionen binomcdf/Bcd und binompdf/Bpd):
+                    </p>
+                    <div class="fill-blank-question">
+                        <p>1. $P(X \le 10)$ (höchstens 10 Abbrüche) $\approx$ <input type="text" id="luecke_kumbino_1" size="8" aria-label="Ergebnis P(X<=10)"></p>
+                        <p>2. $P(X \ge 15)$ (mindestens 15 Abbrüche) $= 1 - P(X \le 14) \approx 1 - $ <input type="text" id="luecke_kumbino_2a" size="8" placeholder="P(X<=14)" aria-label="Ergebnis P(X<=14)"> $= $ <input type="text" id="luecke_kumbino_2b" size="8" aria-label="Ergebnis P(X>=15)"></p>
+                        <p>3. $P(X = 12)$ (genau 12 Abbrüche) $\approx$ <input type="text" id="luecke_kumbino_3" size="8" aria-label="Ergebnis P(X=12)"></p>
+                        <p>4. $P(8 \le X \le 16)$ (zwischen 8 und 16 Abbrüche) $= P(X \le 16) - P(X \le 7) \approx$ <input type="text" id="luecke_kumbino_4a" size="8" placeholder="P(X<=16)" aria-label="Ergebnis P(X<=16)"> - <input type="text" id="luecke_kumbino_4b" size="8" placeholder="P(X<=7)" aria-label="Ergebnis P(X<=7)"> $= $ <input type="text" id="luecke_kumbino_4c" size="8" aria-label="Ergebnis P(8<=X<=16)"></p>
+                        <div id="feedback-kumbino" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankKumBino()">Lücken prüfen</button>
+                    </div>
+
+                     <div id="memory-game-binomial" style="margin-top: 30px;">
+                        <h4>Lernspiel: Formeln der Binomialverteilung</h4>
+                         <div class="memory-controls">
+                             <button onclick="handleStartNewMemoryGame()">Neues Spiel starten</button>
+                             <span id="memory-status">Züge: 0 | Gefunden: 0</span>
+                        </div>
+                        <div id="memory-game-board" class="memory-game-board">
+                            <p>Klicke auf "Neues Spiel starten".</p>
+                        </div>
+                        <div id="feedback-memory" class="feedback-message" style="display: none;"></div>
+                    </div>
+
+                </section>
+
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Jens Keutgen | <a href="../../datenschutz.html">Datenschutz</a></p>
+        </footer>
+
+    </div>
+
+    <script src="../../js/interactive.js"></script>
+    <script src="../../js/game-logic.js"></script>
+
+    <script>
+        // === Seitenspezifische Daten für Interaktionen ===
+        const baumZuordnungInfos = {
+            mapping: {
+                'match_baum_1': '0.931', // DG, SK
+                'match_baum_2': '0.019', // DG, SF
+                'match_baum_3': '0.040', // DS, SK
+                'match_baum_4': '0.010'  // DS, SF
+            },
+            feedbackId: 'feedback-baum-zuordnung'
+        };
+
+        const kombinatorikFlashcards = [
+            { term: "n!", definition: "n-Fakultät: Produkt aller ganzen Zahlen von 1 bis n. $n \\cdot (n-1) \\cdot \\dots \\cdot 1$. $0!=1$." },
+            { term: "$\\binom{n}{k}$", definition: "Binomialkoeffizient 'n über k'. Anzahl Möglichkeiten, k Objekte aus n ohne Reihenfolge/Zurücklegen zu wählen." },
+            { term: "Formel $\\binom{n}{k}$", definition: "$\\frac{n!}{k! \\cdot (n-k)!}$" },
+            { term: "Kombination", definition: "Auswahl von Objekten, bei der die Reihenfolge keine Rolle spielt." },
+            { term: "Permutation", definition: "Anordnung von Objekten, bei der die Reihenfolge eine Rolle spielt." }
+        ];
+
+         const binomialMemoryItems = [
+            '$P(X=k)$', 'Genau k', // Genau k Erfolge
+            '$P(X \\le k)$', 'Höchstens k', // Höchstens k Erfolge
+            '$P(X \\ge k)$', 'Mindestens k', // Mindestens k Erfolge
+            '$1-P(X \\le k-1)$', '$P(X \\ge k)$', // Formel für Mindestens k
+            '$P(X \\le k_2) - P(X \\le k_1-1)$', '$P(k_1 \\le X \\le k_2)$', // Formel für Zwischen k1 und k2
+            'binompdf(n,p,k)', '$P(X=k)$' // TR-Funktion für genau k
+            // '$1-P(X \\le k)$', '$P(X > k)$' // Optional: Mehr als k
+        ];
+
+
+        // === Initialisierung ===
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialisiere Tooltips
+             if (typeof initializeTooltips === 'function') {
+                initializeTooltips();
+            } else if (typeof tippy === 'function') {
+                 tippy('.tooltip', {
+                    content: (reference) => reference.getAttribute('data-tippy-content') || 'Keine Beschreibung',
+                    animation: 'scale-subtle', theme: 'custom-light', placement: 'top',
+                 });
+            }
+
+            // Initialisiere Flashcards für Kombinatorik
+            if (document.getElementById('flashcards-kombinatorik')) {
+                 setupFlashcards(
+                     '#komb-flashcard',             // Selector für das div.flashcard Element
+                     kombinatorikFlashcards,       // Die Daten
+                     'komb-card-counter',          // ID des Zähler-Elements
+                     'prev-komb-card-btn',         // ID des Zurück-Buttons
+                     'next-komb-card-btn'          // ID des Vor-Buttons
+                 );
+            }
+
+             // Initialisiere Memory Spiel (aber erst beim Klick auf "Start")
+             // Der Button ruft handleStartNewMemoryGame() auf.
+        });
+
+
+        // === Hilfsfunktionen & Event Handler ===
+
+        // --- Wrapper für Richtig/Falsch / Multiple Choice (angepasst) ---
+        function handleCheckTrueFalse(radioGroupName, correctAnswerValue, feedbackId, correctMsg, incorrectMsg) {
+             const selectedInput = document.querySelector(`input[name="${radioGroupName}"]:checked`);
+             let message = '';
+             let isSuccess = null; // null für neutrale "Bitte wählen"-Nachricht
+
+             if (selectedInput) {
+                 if (selectedInput.value === correctAnswerValue) {
+                     message = correctMsg || "Richtig!";
+                     isSuccess = true;
+                 } else {
+                     message = incorrectMsg || `Leider falsch.`;
+                     isSuccess = false;
+                 }
+             } else {
+                 message = "Bitte wähle eine Antwort aus.";
+                 isSuccess = null;
+             }
+
+             if (typeof displayFeedback === 'function') {
+                 displayFeedback(feedbackId, message, isSuccess);
+             } else {
+                 console.error("displayFeedback Funktion nicht gefunden!");
+                 const feedbackElement = document.getElementById(feedbackId);
+                 if(feedbackElement) {
+                    feedbackElement.textContent = message;
+                    feedbackElement.style.display = 'block';
+                    feedbackElement.style.color = isSuccess === true ? 'green' : (isSuccess === false ? 'red' : 'grey');
+                 }
+             }
+             // Rendere MathJax neu, falls im Feedback Formeln sind
+             if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                 MathJax.typesetPromise([document.getElementById(feedbackId)]);
+             }
+        }
+
+        // --- Wrapper für Lückentext (Einzelprüfung, anpassbar) ---
+         function handleCheckFillBlankSingle(inputId, correctAnswer, feedbackId, correctMsg, incorrectMsg, isNumeric = true, tolerance = 0.001) {
+            const inputElement = document.getElementById(inputId);
+            let message = '';
+            let isSuccess = false;
+
+            if (inputElement) {
+                const userAnswerRaw = inputElement.value.trim();
+                let userAnswer = userAnswerRaw;
+                 if (isNumeric) {
+                    userAnswer = userAnswerRaw.replace(',', '.'); // Komma zu Punkt für Zahlen
+                 }
+
+                let correct = false;
+                if (isNumeric && !isNaN(parseFloat(userAnswer)) && !isNaN(parseFloat(correctAnswer))) {
+                    // Numerischer Vergleich mit Toleranz
+                     correct = Math.abs(parseFloat(userAnswer) - parseFloat(correctAnswer)) < tolerance;
+                } else if (!isNumeric) {
+                     // Textvergleich (case-insensitive)
+                    correct = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+                } else {
+                    // Wenn numerisch erwartet aber keine Zahl eingegeben
+                    correct = false;
+                }
+
+
+                 if (correct) {
+                    message = correctMsg || "Richtig!";
+                    isSuccess = true;
+                    inputElement.style.border = '2px solid green';
+                } else {
+                    message = incorrectMsg || `Falsch. Die richtige Antwort wäre ${correctAnswer}.`;
+                    isSuccess = false;
+                    inputElement.style.border = '2px solid red';
+                }
+            } else {
+                message = `Fehler: Input-Feld '${inputId}' nicht gefunden.`;
+                isSuccess = false;
+            }
+
+             if (typeof displayFeedback === 'function') {
+                displayFeedback(feedbackId, message, isSuccess);
+             } else {
+                console.error("displayFeedback Funktion nicht gefunden!");
+                 const feedbackElement = document.getElementById(feedbackId);
+                 if(feedbackElement) {
+                    feedbackElement.textContent = message;
+                    feedbackElement.style.display = 'block';
+                 }
+             }
+              // Rendere MathJax neu, falls im Feedback Formeln sind
+             if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                 MathJax.typesetPromise([document.getElementById(feedbackId)]);
+             }
+             return isSuccess; // Gibt zurück, ob korrekt
+        }
+
+        // --- Spezifische Prüffunktionen für die Aufgaben ---
+
+        function handleCheckFillBlankBaum() {
+            let allCorrect = true;
+            // Toleranz ggf. anpassen
+            allCorrect &= handleCheckFillBlankSingle('luecke_baum_1', '0.931', 'feedback-baum-luecken', 'Richtig!', 'Falsch.');
+            allCorrect &= handleCheckFillBlankSingle('luecke_baum_2', '0.019', 'feedback-baum-luecken', 'Richtig!', 'Falsch.');
+            allCorrect &= handleCheckFillBlankSingle('luecke_baum_3', '0.040', 'feedback-baum-luecken', 'Richtig!', 'Falsch.');
+            allCorrect &= handleCheckFillBlankSingle('luecke_baum_4', '0.010', 'feedback-baum-luecken', 'Richtig!', 'Falsch.');
+
+             // Summe prüfen
+             const val1 = parseFloat(document.getElementById('luecke_baum_1').value.replace(',', '.')) || 0;
+             const val2 = parseFloat(document.getElementById('luecke_baum_2').value.replace(',', '.')) || 0;
+             const val3 = parseFloat(document.getElementById('luecke_baum_3').value.replace(',', '.')) || 0;
+             const val4 = parseFloat(document.getElementById('luecke_baum_4').value.replace(',', '.')) || 0;
+             const summe = (val1 + val2 + val3 + val4).toFixed(3);
+             document.getElementById('baum_summe_check').textContent = summe;
+             if (Math.abs(val1 + val2 + val3 + val4 - 1) > 0.002) {
+                  document.getElementById('baum_summe_check').style.color = 'red';
+                  allCorrect = false; // Markiere als falsch wenn Summe nicht stimmt
+             } else {
+                  document.getElementById('baum_summe_check').style.color = 'green';
+             }
+
+
+            const feedbackElement = document.getElementById('feedback-baum-luecken');
+            if (allCorrect) {
+                 displayFeedback('feedback-baum-luecken', 'Alle Berechnungen korrekt und die Summe ist 1!', true);
+            } else {
+                 displayFeedback('feedback-baum-luecken', 'Einige Berechnungen sind noch falsch oder die Summe ergibt nicht 1.', false);
+            }
+        }
+
+        function handleCheckMatchingBaum() {
+            // Nutzen der globalen Logik, falls vorhanden
+            if (typeof checkMatchingLogic === 'function') {
+                const result = checkMatchingLogic(baumZuordnungInfos.mapping);
+                displayFeedback(baumZuordnungInfos.feedbackId, result.message, result.allCorrect);
+            } else {
+                 console.error("checkMatchingLogic Funktion nicht gefunden! Bitte game-logic.js einbinden.");
+                 displayFeedback(baumZuordnungInfos.feedbackId, "Fehler: Prüflogik nicht geladen.", false);
+            }
+        }
+
+
+        function handleCheckFillBlankVFT() {
+             let allCorrect = true;
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_1', '0.03', 'feedback-vft-luecken', 'Richtig!', 'Falsch.');
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_2', '0.57', 'feedback-vft-luecken', 'Richtig!', 'Falsch.');
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_3', '0.04', 'feedback-vft-luecken', 'Richtig!', 'Falsch.');
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_4', '0.36', 'feedback-vft-luecken', 'Richtig!', 'Falsch.');
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_5', '0.07', 'feedback-vft-luecken', 'Richtig! $P(F)=0.03+0.04$', 'Falsch.'); // P(F)
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_6', '0.93', 'feedback-vft-luecken', 'Richtig! $P(\\overline{F})=0.57+0.36$', 'Falsch.'); // P(Fbar)
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_7', '0.60', 'feedback-vft-luecken', 'Richtig! $P(P1)=0.03+0.57$', 'Falsch.'); // P(P1)
+             allCorrect &= handleCheckFillBlankSingle('luecke_vft_8', '0.40', 'feedback-vft-luecken', 'Richtig! $P(P2)=0.04+0.36$', 'Falsch.'); // P(P2)
+
+            // Zusätzliche Kontrollen (Summen)
+            const pF = parseFloat(document.getElementById('luecke_vft_5').value.replace(',', '.')) || 0;
+            const pFbar = parseFloat(document.getElementById('luecke_vft_6').value.replace(',', '.')) || 0;
+            const pP1 = parseFloat(document.getElementById('luecke_vft_7').value.replace(',', '.')) || 0;
+            const pP2 = parseFloat(document.getElementById('luecke_vft_8').value.replace(',', '.')) || 0;
+
+            if (Math.abs(pF + pFbar - 1) > 0.002 || Math.abs(pP1 + pP2 - 1) > 0.002) {
+                allCorrect = false;
+            }
+
+            const feedbackElement = document.getElementById('feedback-vft-luecken');
+            if (allCorrect) {
+                 displayFeedback('feedback-vft-luecken', 'Alle Berechnungen korrekt!', true);
+            } else {
+                 displayFeedback('feedback-vft-luecken', 'Einige Berechnungen sind noch falsch oder die Randsummen ergeben nicht 1.', false);
+            }
+        }
+
+         function handleCheckVFTMC() {
+              handleCheckTrueFalse(
+                'q_vft_mc',
+                'c',
+                'feedback-vft-mc',
+                'Richtig! $P(P1 \\cap \\overline{F})$ ist die Schnittwahrscheinlichkeit von Plotter 1 und nicht fehlerhaft.',
+                'Falsch. Gesucht ist der Anteil, der *beide* Eigenschaften hat (Plotter 1 UND nicht fehlerhaft), also die Schnittwahrscheinlichkeit $P(P1 \\cap \\overline{F})$. $P_{P1}(\\overline{F})$ wäre die Wahrscheinlichkeit für "nicht fehlerhaft", *gegeben* es ist Plotter 1.'
+                );
+         }
+
+        function handleCheckFillBlankBayes() {
+            let allCorrect = true;
+             const pfCorrect = handleCheckFillBlankSingle('luecke_bayes_0', '0.07', 'feedback-bayes-luecken', 'Richtig!', 'Falsch. $P(F)=0.03+0.04$.');
+             allCorrect &= pfCorrect;
+
+             // Nur prüfen, wenn P(F) korrekt berechnet wurde
+             if (pfCorrect) {
+                 const p1Correct = handleCheckFillBlankSingle('luecke_bayes_1', '0.429', 'feedback-bayes-luecken', 'Richtig!', 'Falsch. $P_F(P1) = (0.05*0.6)/0.07$.');
+                 const p2Correct = handleCheckFillBlankSingle('luecke_bayes_2', '0.571', 'feedback-bayes-luecken', 'Richtig!', 'Falsch. $P_F(P2) = (0.10*0.4)/0.07$.');
+                 allCorrect &= p1Correct && p2Correct;
+
+                 // Summe prüfen
+                 const val1 = parseFloat(document.getElementById('luecke_bayes_1').value.replace(',', '.')) || 0;
+                 const val2 = parseFloat(document.getElementById('luecke_bayes_2').value.replace(',', '.')) || 0;
+                 const summe = (val1 + val2).toFixed(3);
+                 document.getElementById('bayes_summe').textContent = summe;
+                 if (Math.abs(val1 + val2 - 1) > 0.002) { // Toleranz für Rundungsfehler
+                      document.getElementById('bayes_summe').style.color = 'red';
+                      allCorrect = false;
+                 } else {
+                      document.getElementById('bayes_summe').style.color = 'green';
+                 }
+            } else {
+                 allCorrect = false; // Bayes kann nicht richtig sein, wenn P(F) falsch ist
+                 document.getElementById('bayes_summe').textContent = '?';
+                 document.getElementById('bayes_summe').style.color = 'inherit'; // reset color
+            }
+
+
+            const feedbackElement = document.getElementById('feedback-bayes-luecken');
+            if (allCorrect) {
+                 displayFeedback('feedback-bayes-luecken', 'Alle Berechnungen korrekt und die Summe ist 1!', true);
+            } else {
+                 displayFeedback('feedback-bayes-luecken', 'Einige Berechnungen sind noch falsch oder die Summe ergibt nicht 1. Prüfe zuerst $P(F)$.', false);
+            }
+        }
+
+         function handleCheckFillBlankKumBino() {
+             let allCorrect = true;
+             // Ergebnisse vom TR gerundet auf 4 Stellen
+             allCorrect &= handleCheckFillBlankSingle('luecke_kumbino_1', '0.3474', 'feedback-kumbino', 'Richtig!', 'Falsch. Prüfe TR: binomcdf(80, 0.15, 10)'); // P(X<=10)
+
+             const p_le14_correct = handleCheckFillBlankSingle('luecke_kumbino_2a', '0.7898', 'feedback-kumbino', 'Richtig!', 'Falsch. Prüfe TR: binomcdf(80, 0.15, 14)');
+             const p_ge15_correct = handleCheckFillBlankSingle('luecke_kumbino_2b', '0.2102', 'feedback-kumbino', 'Richtig!', 'Falsch. $1 - P(X \\le 14)$');
+             allCorrect &= p_le14_correct && p_ge15_correct;
+
+             allCorrect &= handleCheckFillBlankSingle('luecke_kumbino_3', '0.1235', 'feedback-kumbino', 'Richtig!', 'Falsch. Prüfe TR: binompdf(80, 0.15, 12)'); // P(X=12)
+
+             const p_le16_correct = handleCheckFillBlankSingle('luecke_kumbino_4a', '0.9256', 'feedback-kumbino', 'Richtig!', 'Falsch. Prüfe TR: binomcdf(80, 0.15, 16)');
+             const p_le7_correct = handleCheckFillBlankSingle('luecke_kumbino_4b', '0.0689', 'feedback-kumbino', 'Richtig!', 'Falsch. Prüfe TR: binomcdf(80, 0.15, 7)');
+             const p_zwischen_correct = handleCheckFillBlankSingle('luecke_kumbino_4c', '0.8567', 'feedback-kumbino', 'Richtig!', 'Falsch. $P(X \\le 16) - P(X \\le 7)$');
+             allCorrect &= p_le16_correct && p_le7_correct && p_zwischen_correct;
+
+
+            const feedbackElement = document.getElementById('feedback-kumbino');
+            if (allCorrect) {
+                 displayFeedback('feedback-kumbino', 'Alle Berechnungen korrekt!', true);
+            } else {
+                 displayFeedback('feedback-kumbino', 'Einige Berechnungen sind noch falsch. Achte auf die korrekte Funktion (pdf/cdf) und die Parameter n, p, k bzw. k-Grenzen.', false);
+            }
+         }
+
+         // Wrapper für Memory Spiel Start (aus game-logic.js)
+         function handleStartNewMemoryGame() {
+             if (typeof setupMemoryGame === 'function') {
+                setupMemoryGame(
+                    'memory-game-board',        // ID des Spielbretts
+                    'memory-status',            // ID der Statusanzeige
+                    'feedback-memory',          // ID des Feedback-Bereichs
+                    binomialMemoryItems         // Die Items für DIESES Spiel
+                );
+            } else {
+                 console.error("setupMemoryGame Funktion nicht gefunden! Bitte game-logic.js einbinden.");
+                  displayFeedback('feedback-memory', "Fehler: Spiel-Logik nicht geladen.", false);
+            }
+        }
+
+         // Hilfsfunktion für Flashcards (aus game-logic.js angepasst, falls globale nicht reicht)
+         function flipFlashcard(element) {
+             if(element) {
+                element.classList.toggle('flipped');
+             }
+        }
+         // Hinweis: Die nextFlashcard() und prevFlashcard() müssen global sein oder
+         // spezifisch implementiert werden, wenn mehrere Flashcard-Sets auf einer Seite sind.
+         // Die globale Implementierung in game-logic.js ist hierfür nicht direkt ausgelegt.
+         // Einfacher Ansatz: Globale Variablen überschreiben (nicht ideal) oder Logik duplizieren/anpassen.
+         // Hier wird angenommen, dass die globale Logik funktioniert oder angepasst wird.
+
+
+    </script>
+
+</body>
+</html>

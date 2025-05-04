@@ -1,0 +1,192 @@
+/* Grundlegende Stile */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1, h2, h3 {
+    color: #0056b3; /* Blauton */
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    margin: 30px 0;
+}
+
+/* Container für jede Simulation */
+.simulation-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+/* Bereich für den einzelnen Graphen */
+.graph-section-single {
+    display: flex;
+    justify-content: center; /* Zentriert den einzelnen Graphen */
+    margin-bottom: 20px;
+}
+
+/* Styling des Graphen-Divs */
+.graph-single {
+    width: 80%;
+    max-width: 600px;
+    min-width: 300px;
+    height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Bereich für Steuerungselemente */
+.controls-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+/* Anzeige der aktuellen Funktionsgleichung */
+.equation-display {
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #ddeeff; /* Heller Blauton */
+    border: 1px solid #cce0ff;
+    border-radius: 4px;
+    min-height: 1.5em; /* Verhindert Springen beim Laden */
+}
+
+
+/* Einzelne Parameter-Steuerung (Label, Slider, Wert) */
+.param-control {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center; /* Vertikal zentrieren */
+    flex-wrap: wrap; /* Umbruch bei schmalen Bildschirmen */
+}
+
+.param-control label {
+    min-width: 220px; /* Breite für Labels */
+    font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 5px; /* Für Umbruch */
+}
+
+.param-control input[type="range"] {
+    flex-grow: 1; /* Nimmt verfügbaren Platz ein */
+    min-width: 150px; /* Mindestbreite Slider */
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.param-control input[type="range"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.param-control span {
+    min-width: 40px;
+    text-align: right;
+    font-family: monospace;
+    background-color: #fff;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    margin-left: 5px;
+}
+
+/* Bereich für Fragen */
+.questions-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px dashed #007bff;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.question-block {
+    margin-bottom: 15px;
+}
+
+.question-block p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.question-block label {
+    display: block; /* Optionen untereinander */
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+.question-block label:hover {
+    background-color: #e2e6ea;
+}
+
+
+.question-block input[type="radio"] {
+    margin-right: 8px;
+}
+
+/* Button zum Absenden der Antworten */
+.submit-answer-btn {
+    background-color: #28a745; /* Grün */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.submit-answer-btn:hover {
+    background-color: #218838;
+}
+
+/* Bereich für Feedback (Korrekt/Falsch) */
+.feedback-section {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.feedback-correct {
+    background-color: #d4edda; /* Hellgrün */
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.feedback-incorrect {
+    background-color: #f8d7da; /* Hellrot */
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Abschlussbereich */
+#conclusion {
+     background-color: #e2f3ff;
+     padding: 15px;
+     border-radius: 5px;
+     border: 1px solid #b8dfff;
+}
+
+#conclusion .graph-single {
+     width: 90%;
+     max-width: 700px;
+     height: 400px;
+     margin: 20px auto; /* Zentrieren */
+}

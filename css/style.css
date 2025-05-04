@@ -1,0 +1,943 @@
+/* css/style.css */
+
+/* Globale Einstellungen & Variablen */
+:root {
+    --primary-color: #007bff; /* Blauer Akzent */
+    --secondary-color: #6c757d; /* Grau für Sekundärtext */
+    --light-bg: #f8f9fa; /* Heller Hintergrund */
+    --dark-text: #343a40; /* Dunkler Text */
+    --light-text: #ffffff;
+    --border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    --font-body: 'Lato', sans-serif;
+    --font-heading: 'Roboto Slab', serif;
+}
+
+/* Basis-Styling */
+body {
+    font-family: var(--font-body);
+    line-height: 1.7;
+    margin: 0;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+main {
+    flex-grow: 1; /* Sorgt dafür, dass der Footer unten bleibt */
+    padding: 20px;
+    max-width: 1000px;
+    margin: 30px auto;
+    width: 90%;
+}
+
+/* Header & Footer */
+header, footer {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+header h1 {
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+}
+
+footer {
+    margin-top: auto; /* Drückt den Footer nach unten */
+    font-size: 0.9em;
+}
+footer a {
+    color: var(--light-text);
+    text-decoration: underline;
+}
+footer a:hover {
+    text-decoration: none;
+}
+
+
+/* Skript-Liste auf der Hauptseite */
+#script-list {
+    padding: 0;
+    list-style: none;
+}
+
+
+/* NEU: Styling für die Kategorie-Überschriften */
+.category-heading {
+    font-family: var(--font-heading); /* Deine Überschriften-Schriftart */
+    color: var(--primary-color);      /* Deine Hauptfarbe */
+    margin-top: 40px;                 /* Abstand nach oben zur vorherigen Kategorie/Header */
+    margin-bottom: 20px;              /* Abstand nach unten zu den Kacheln */
+    padding-bottom: 10px;             /* Innenabstand unten */
+    border-bottom: 2px solid var(--primary-color); /* Linie unter der Überschrift */
+    font-size: 1.8em;                 /* Passende Schriftgröße */
+}
+/* Optional: Kein oberer Rand bei der allerersten Überschrift */
+#script-list > .category-heading:first-of-type {
+    margin-top: 0;
+}
+
+/* NEU: Das Grid-Layout auf den Container *innerhalb* jeder Kategorie anwenden */
+.category-script-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Dein Kachel-Layout */
+    gap: 25px; /* Dein Abstand zwischen den Kacheln */
+}
+
+/* Das Styling für die Kacheln selbst (.script-item, .script-item a, etc.)
+   sollte weitgehend gleich bleiben können, da die Klassenstruktur
+   innerhalb von .category-script-grid erhalten bleibt. */
+
+.script-item {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    overflow: hidden; /* Für abgerundete Ecken bei Links */
+}
+
+.script-item:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-5px);
+}
+
+.script-item a {
+    display: block;
+    padding: 25px 20px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+}
+.script-item a p { /* Styling für die Beschreibung innerhalb des Links */
+     font-size: 0.9em;
+     color: var(--secondary-color);
+     margin-top: 5px;
+     font-weight: normal; /* Normales Gewicht für Beschreibung */
+}
+
+.script-item a:hover {
+    background-color: #f1f1f1; /* Leichter Hover-Effekt */
+}
+
+/* Das Styling für den Lade-Platzhalter bleibt auch gleich */
+.loading-placeholder {
+    color: var(--secondary-color);
+    text-align: center;
+    padding: 20px;
+    /* grid-column: 1 / -1; /* Nicht mehr nötig, wenn #script-list kein Grid ist */
+}
+
+#script-list .script-item {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    overflow: hidden; /* Für abgerundete Ecken bei Links */
+}
+
+#script-list .script-item:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-5px);
+}
+
+#script-list a {
+    display: block;
+    padding: 25px 20px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+#script-list a:hover {
+    background-color: #f1f1f1; /* Leichter Hover-Effekt */
+}
+
+.loading-placeholder {
+    color: var(--secondary-color);
+    text-align: center;
+    padding: 20px;
+    grid-column: 1 / -1; /* Nimmt volle Breite ein */
+}
+
+
+/* === Styling für einzelne Skript-Seiten === */
+
+.script-header {
+    background-color: var(--secondary-color);
+    color: var(--light-text);
+    padding: 1rem;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.script-header h1 {
+    margin: 0;
+    font-size: 1.8em;
+    font-family: var(--font-heading);
+}
+
+.script-header .back-link {
+    color: var(--light-text);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: 1px solid var(--light-text);
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.script-header .back-link:hover {
+    background-color: var(--light-text);
+    color: var(--secondary-color);
+}
+
+.script-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.script-content section {
+    margin-bottom: 40px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+.script-content section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.script-content h2, .script-content h3 {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+.script-content h2 { font-size: 1.6em; }
+.script-content h3 { font-size: 1.3em; color: var(--secondary-color); }
+
+
+/* Text-Hervorhebungen & Tooltips */
+.highlight {
+    background-color: #fff3cd; /* Helles Gelb */
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.tooltip {
+    border-bottom: 2px dotted var(--primary-color);
+    cursor: help;
+    position: relative; /* Für Tippy.js oft nicht nötig, aber als Basis */
+}
+
+/* Styling für Tippy.js Tooltips (Beispiel - Tippy bringt eigene Themes mit) */
+.tippy-box[data-theme~='custom-light'] {
+  background-color: #ffffff;
+  color: var(--dark-text);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.tippy-box[data-theme~='custom-light'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #ffffff;
+}
+/* ... weitere Pfeilrichtungen anpassen ... */
+
+
+/* Bilder */
+figure {
+    margin: 20px 0;
+    text-align: center;
+    background-color: #fdfdfd;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+figure img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 3px;
+}
+figure figcaption {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Mathematische Darstellungen */
+mjx-container { /* MathJax Container */
+    margin: 15px 0;
+    overflow-x: auto; /* Horizontal scrollbar if needed */
+}
+
+/* Diagramm-Container */
+.chart-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: #fdfdfd;
+}
+
+/* Quiz-Styling */
+.question {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+.question p strong {
+    font-family: var(--font-heading);
+    color: var(--dark-text);
+}
+.question label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+.question label:hover {
+    background-color: #e9ecef;
+}
+.question input[type="radio"] {
+    margin-right: 10px;
+}
+/* Feedback Styling */
+.question .correct {
+    color: #28a745; /* Grün */
+    font-weight: bold;
+}
+.question .incorrect {
+    color: #dc3545; /* Rot */
+    font-weight: bold;
+}
+.question label.correct-label { background-color: #d4edda; border-color: #c3e6cb; }
+.question label.incorrect-label { background-color: #f8d7da; border-color: #f5c6cb; }
+
+
+button.quiz-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border: none;
+    padding: 12px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 10px;
+}
+button.quiz-button:hover {
+    background-color: #0056b3; /* Dunkleres Blau */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+#quiz-feedback {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+#quiz-feedback.success {
+    background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;
+}
+#quiz-feedback.error {
+     background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
+}
+
+
+/* Spiel-Container */
+#game-container {
+    border: 2px dashed var(--secondary-color);
+    padding: 25px;
+    min-height: 200px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    text-align: center;
+    color: var(--secondary-color);
+}
+
+/* Responsivität */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        padding: 15px;
+    }
+    header h1 { font-size: 1.8em; }
+    .script-header h1 { font-size: 1.5em; }
+    .script-header { flex-direction: column; align-items: flex-start; }
+    .script-header .back-link { margin-top: 10px; }
+    .script-content { padding: 20px; }
+}
+
+@media (max-width: 480px) {
+    header h1 { font-size: 1.5em; }
+    .script-header h1 { font-size: 1.3em; }
+    #script-list { grid-template-columns: 1fr; } /* Eine Spalte auf sehr kleinen Bildschirmen */
+    button.quiz-button { width: 100%; }
+}
+/* === NEU: Styling für zusätzliche Quiz/Spiel-Typen === */
+
+/* Lückentext Input */
+.fill-blank-question input[type="text"] {
+    border: 1px solid var(--border-color);
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.95em;
+    transition: border-color 0.3s ease;
+}
+.fill-blank-question input[type="text"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* Zuordnung Dropdown */
+.matching-item {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.matching-item label {
+    min-width: 100px; /* Für bessere Ausrichtung */
+    font-weight: bold;
+}
+.matching-item select {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    min-width: 150px;
+    transition: border-color 0.3s ease;
+}
+.matching-item select:focus {
+     border-color: var(--primary-color);
+     outline: none;
+}
+
+/* Flashcards */
+.flashcard-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.flashcard-controls button {
+    padding: 8px 12px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.flashcard-controls button:disabled {
+    background-color: #ccc;
+    cursor: default;
+}
+.flashcard-controls #card-counter {
+    font-weight: bold;
+}
+
+.flashcard-container {
+    perspective: 1000px; /* Wichtig für 3D-Effekt */
+    min-height: 150px; /* Höhe anpassen */
+    margin-bottom: 15px;
+}
+
+.flashcard {
+    width: 100%;
+    height: 150px; /* Muss mit min-height oben übereinstimmen */
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.flashcard-front,
+.flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Versteckt die Rückseite des Elements */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box; /* Padding wird in Höhe/Breite eingerechnet */
+    border-radius: 8px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.flashcard-front {
+    background-color: #e9f5ff; /* Hellblau */
+    color: var(--dark-text);
+}
+
+.flashcard-back {
+    background-color: #d1ecf1; /* Etwas dunkleres Blau */
+    color: var(--dark-text);
+    transform: rotateY(180deg); /* Rückseite ist umgedreht */
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg); /* Dreht die gesamte Karte */
+}
+
+/* Memory Spiel */
+.memory-controls {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.memory-controls button {
+     padding: 10px 15px;
+     background-color: var(--primary-color);
+     color: white;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     font-weight: bold;
+}
+#memory-status {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.memory-game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 Spalten, anpassbar */
+    gap: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    min-height: 100px; /* Falls leer */
+}
+
+.memory-card {
+    background-color: var(--secondary-color);
+    border-radius: 5px;
+    height: 80px; /* Höhe anpassen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8em; /* Größe des Symbols/Texts */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    user-select: none; /* Verhindert Textauswahl */
+}
+
+.memory-card.hidden {
+    background-color: var(--secondary-color);
+    color: transparent; /* Versteckt den Text */
+}
+.memory-card.hidden:hover {
+     background-color: #5a6268; /* Etwas heller im Hover */
+}
+
+.memory-card.revealed {
+    background-color: #e9ecef; /* Aufgedeckt */
+    color: var(--dark-text);
+    cursor: default;
+    transform: scale(1.05); /* Leichter Zoom-Effekt */
+}
+
+.memory-card.matched {
+    background-color: #28a745; /* Grün für gefundene Paare */
+    color: white;
+    cursor: default;
+    transform: scale(1);
+    opacity: 0.7; /* Leicht ausblenden */
+}
+
+/* Feedback Nachrichten etwas allgemeiner */
+.feedback-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid transparent;
+    white-space: pre-wrap; /* Erlaubt Zeilenumbrüche für detailliertes Feedback */
+}
+.feedback-message.success {
+    background-color: #d4edda; color: #155724; border-color: #c3e6cb;
+}
+.feedback-message.error {
+     background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;
+}
+.feedback-message.info { /* Für neutrales Feedback */
+      background-color: #e2e3e5; color: #383d41; border-color: #d6d8db;
+}
+/* --- Anpassungen für die Startseite (index.html) mit umschaltbaren Kategorien --- */
+
+/* Basis-Layout für die Liste bleibt einfach */
+#script-list {
+    padding: 0;
+    list-style: none;
+}
+
+/* Styling für die klickbaren Kategorie-Überschriften */
+.category-heading.interactive { /* Klasse 'interactive' wurde im JS hinzugefügt */
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    margin-top: 25px; /* Abstand zwischen den Kategorien */
+    margin-bottom: 0; /* Kein Abstand nach unten, da Inhalt direkt folgt */
+    padding: 12px 20px; /* Mehr Padding für bessere Klickbarkeit */
+    border: 1px solid var(--border-color); /* Rahmen */
+    border-bottom: 1px solid var(--border-color); /* Unterer Rahmen auch */
+    font-size: 1.4em; /* Ggf. Größe anpassen */
+    cursor: pointer; /* Mauszeiger als Hand */
+    transition: background-color 0.2s ease; /* Hover-Effekt */
+    border-radius: 6px; /* Abrundung */
+    background-color: var(--light-bg); /* Heller Hintergrund */
+    position: relative; /* Für Pfeil-Indikator */
+    user-select: none; /* Verhindert Textauswahl beim Klicken */
+}
+#script-list > .category-heading.interactive:first-of-type {
+    margin-top: 0; /* Kein extra Abstand oben bei der ersten */
+}
+.category-heading.interactive:hover {
+    background-color: #e9ecef; /* Etwas dunkler im Hover */
+}
+
+/* Styling für die *aktive* (ausgewählte/offene) Kategorie-Überschrift */
+.category-heading.interactive.active {
+    background-color: var(--primary-color); /* Hauptfarbe als Hintergrund */
+    color: var(--light-text); /* Heller Text */
+    border-color: var(--primary-color);
+    border-bottom-left-radius: 0; /* Keine Abrundung unten links, wenn Inhalt offen */
+    border-bottom-right-radius: 0;
+    border-bottom: none; /* Kein unterer Rahmen, geht in Inhalt über */
+}
+
+/* Pfeil-Indikator (optional, aber hilfreich) */
+.category-heading.interactive::after {
+    content: '▼'; /* Pfeil nach unten (geschlossen) */
+    font-size: 0.7em;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-color);
+    transition: transform 0.2s ease;
+}
+.category-heading.interactive.active::after {
+    content: '▲'; /* Pfeil nach oben (offen) */
+    color: var(--light-text); /* Farbe im aktiven Zustand */
+    /* transform: translateY(-50%) rotate(180deg); */ /* Alternative: Drehen */
+}
+
+
+/* Container für die Skript-Kacheln (Inhaltsbereich) */
+.category-script-grid.category-content { /* Beide Klassen sind am Element */
+    /* Layout für die Kacheln bleibt Grid */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    /* Styling für den "Kasten" unter der Überschrift */
+    padding: 25px;
+    border: 1px solid var(--primary-color); /* Rahmen passend zur aktiven Überschrift */
+    border-top: none; /* Oberer Rahmen wird von der Überschrift übernommen */
+    margin-bottom: 25px; /* Abstand bis zur nächsten Überschrift */
+    border-radius: 0 0 6px 6px; /* Nur unten abrunden */
+    background-color: #ffffff; /* Weißer Hintergrund für Inhalt */
+}
+
+/* Klasse zum Aus-/Einblenden */
+.category-content {
+    display: none; /* Standardmäßig sind ALLE Inhaltsbereiche verborgen */
+}
+.category-content.visible {
+    display: grid; /* NUR die Bereiche mit der Klasse 'visible' werden angezeigt */
+                   /* Wichtig: Muss 'grid' sein, damit das Kachel-Layout funktioniert */
+}
+
+
+/* Das Styling für .script-item etc. kann unverändert bleiben */
+.script-item {
+   /* ... */
+}
+.script-item a {
+  /* ... */
+}
+/* css/style.css Ergänzung für Stationenlernen */
+
+.stationen-container {
+    display: grid; /* Oder flexbox: display: flex; flex-wrap: wrap; */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive Spalten */
+    gap: 20px; /* Abstand zwischen Stationen */
+    margin-top: 20px;
+}
+
+.station {
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa; /* Leichter Hintergrund */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.station h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+/* Styling für das <details> Element */
+.station details {
+    margin-top: 15px;
+}
+
+.station details summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--secondary-color);
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+    display: inline-block; /* Verhindert, dass es die volle Breite einnimmt */
+}
+.station details summary:hover {
+    background-color: #dcdfe2;
+}
+
+/* Styling für den Aufgabeninhalt innerhalb von <details> */
+.station details > div { /* Oder spezifischere Klasse, falls nötig */
+     margin-top: 15px;
+     padding-top: 15px;
+     border-top: 1px dashed var(--border-color);
+}
+.content-with-sidebar {
+    display: flex; /* Nutzt Flexbox für die Anordnung von Menü und Inhalt */
+    gap: 30px; /* Abstand zwischen Menü und Hauptinhalt */
+    max-width: 1200px; /* Maximale Breite für das gesamte Layout anpassen */
+    margin: 30px auto; /* Zentrieren und Abstand oben/unten */
+    width: 95%; /* Breite auf größeren Bildschirmen */
+}
+
+.side-menu {
+    flex: 0 0 200px; /* Menü: nicht wachsen, nicht schrumpfen, feste Breite von 200px */
+    background-color: #f8f9fa; /* Heller Hintergrund für das Menü */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    height: fit-content; /* Höhe passt sich dem Inhalt an */
+    position: sticky; /* Menü bleibt beim Scrollen sichtbar */
+    top: 30px; /* Abstand vom oberen Rand beim Sticky-Scrolling */
+}
+
+.side-menu h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 5px;
+}
+
+.side-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu ul li {
+    margin-bottom: 10px;
+}
+
+.side-menu ul li a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: bold;
+    display: block; /* Macht den gesamten Bereich klickbar */
+    padding: 8px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.side-menu ul li a:hover {
+    background-color: #e9ecef;
+    color: var(--dark-text);
+}
+
+/* Aktueller Link hervorheben (optional, erfordert JS oder manuelles Setzen) */
+/* .side-menu ul li a.active {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+} */
+
+.main-content-area {
+    flex: 1; /* Hauptinhalt nimmt den restlichen verfügbaren Platz ein */
+    /* Die .script-content-Styles (Padding, Background etc.) bleiben für den inneren Artikel erhalten */
+}
+
+/* Responsivität für das Seitenmenü */
+@media (max-width: 900px) {
+    .content-with-sidebar {
+        flex-direction: column; /* Untereinander anordnen auf kleineren Bildschirmen */
+        gap: 20px;
+    }
+
+    .side-menu {
+        flex-basis: auto; /* Breite automatisch anpassen */
+        width: 100%; /* Volle Breite einnehmen */
+        position: static; /* Sticky-Positionierung aufheben */
+        margin-bottom: 20px;
+    }
+}
+
+/* Optional: Ältere main-Regel anpassen, falls sie die Breite einschränkt */
+/* Überprüfe, ob es eine Regel wie 'main { max-width: 1000px; ... }' gibt,
+   die eventuell angepasst werden muss, wenn .content-with-sidebar verwendet wird.
+   Die Regel oben für .main-content-area sollte das meiste steuern. */
+
+/* --- Bestehende CSS-Regeln für .script-content, .question etc. bleiben gültig --- */
+/* ===== ÄNDERUNGEN/ERGÄNZUNGEN: Styling für ausklappbares Seitenmenü ===== */
+
+/* Alten Container entfernen oder anpassen (wird nicht mehr für Flexbox gebraucht) */
+/* .content-with-sidebar { ... } */ /* Diese Regel ist nicht mehr nötig */
+
+/* Neuer Container (optional, falls benötigt) */
+.content-container {
+    max-width: 1200px; /* Beispiel */
+    margin: 30px auto;
+    width: 95%;
+}
+
+/* Styling für den Toggle-Button */
+#menu-toggle-btn {
+    position: fixed; /* Feste Position im Viewport */
+    top: 80px; /* Abstand von oben (unter dem Header?) */
+    left: 15px; /* Abstand von links */
+    z-index: 1100; /* Über dem Menü */
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border: none;
+    border-radius: 50%; /* Rund */
+    width: 45px;
+    height: 45px;
+    font-size: 1.5em; /* Größe des Icons */
+    line-height: 45px; /* Vertikal zentrieren */
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+}
+#menu-toggle-btn:hover {
+    background-color: #0056b3; /* Dunkleres Blau */
+}
+
+/* Grund-Styling für das Seitenmenü (versteckter Zustand) */
+.side-menu {
+    position: fixed; /* Feste Position, aus dem Fluss genommen */
+    top: 0;
+    left: -260px; /* Startet außerhalb des sichtbaren Bereichs (Breite + etwas Puffer) */
+    width: 250px; /* Feste Breite für das Menü */
+    height: 100vh; /* Volle Höhe des Viewports */
+    background-color: #f8f9fa;
+    padding: 20px;
+    padding-top: 60px; /* Platz für Schließen-Button o.Ä. lassen */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1000; /* Unter dem Toggle-Button, aber über dem Inhalt */
+    overflow-y: auto; /* Scrollbar, falls Inhalt zu lang */
+    transition: left 0.3s ease-in-out; /* Sanfte Animation für das Ein-/Ausklappen */
+}
+
+/* Styling für das offene Menü */
+.side-menu.menu-open {
+    left: 0; /* Fährt ins Bild */
+}
+
+/* Anpassung des Hauptinhaltsbereichs */
+.main-content-area {
+    padding: 20px; /* Beibehaltung des Innenabstands */
+    margin-left: 0; /* Standard-Margin */
+    transition: margin-left 0.3s ease-in-out; /* Sanfte Animation für die Verschiebung */
+}
+
+/* Wenn das Menü aktiv ist, verschiebe den Hauptinhalt nach rechts */
+body.side-menu-active .main-content-area {
+    margin-left: 250px; /* Platz für das offene Menü schaffen */
+}
+
+/* Anpassungen für kleinere Bildschirme */
+@media (max-width: 900px) {
+     body.side-menu-active .main-content-area {
+        margin-left: 0; /* Inhalt nicht verschieben, Menü überlagert */
+    }
+     /* Optional: Hauptinhalt leicht abdunkeln, wenn Menü offen ist */
+    body.side-menu-active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 999; /* Unter dem Menü, über dem Inhalt */
+    }
+
+     #menu-toggle-btn {
+        top: 15px; /* Button weiter nach oben */
+     }
+     .side-menu {
+         padding-top: 70px; /* Mehr Platz oben auf Mobilgeräten */
+     }
+}
+
+
+/* --- Bestehende .side-menu h2, ul, li, a Styles (können größtenteils bleiben) --- */
+.side-menu h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 5px;
+}
+.side-menu ul { list-style: none; padding: 0; margin: 0; }
+.side-menu ul li { margin-bottom: 10px; }
+.side-menu ul li a {
+    text-decoration: none;
+    color: var(--secondary-color);
+    font-weight: bold;
+    display: block;
+    padding: 8px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.side-menu ul li a:hover { background-color: #e9ecef; color: var(--dark-text); }
+
+/* --- Bestehende .main-content-area .script-content Styles bleiben gültig --- */

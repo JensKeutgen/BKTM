@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beispiel Modul: Interaktive Elemente</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+      MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    </head>
+<body>
+    <div class="page-container">
+        <header class="script-header">
+             <h1>Beispiel Modul: Interaktive Elemente</h1>
+             <a href="../../index.html" class="back-link">Zurück zur Übersicht</a>
+        </header>
+
+        <button id="menu-toggle-btn" aria-label="Menü umschalten" aria-expanded="false">
+            ☰ </button>
+
+        <div class="content-container">
+
+            <aside class="side-menu" id="side-menu">
+                <h2>Navigation</h2>
+                <ul>
+                    <li><a href="#text-examples">Text Beispiele</a></li>
+                    <li><a href="#graphics">Grafiken</a></li>
+                    <li><a href="#math">Mathematik</a></li>
+                    <li><a href="#quiz">Multiple Choice</a></li>
+                    <li><a href="#game">Lernspiel (Platzh.)</a></li>
+                    <li><a href="#true-false-quiz">Richtig/Falsch</a></li>
+                    <li><a href="#fill-blank-quiz">Lückentext</a></li>
+                    <li><a href="#matching-quiz">Zuordnung</a></li>
+                    <li><a href="#flashcards">Karteikarten</a></li>
+                    <li><a href="#memory-game">Memory</a></li>
+                 </ul>
+            </aside>
+
+            <main class="main-content-area" id="main-content">
+                <article class="script-content">
+                    <section id="text-examples">
+                        <h2>Texte mit Markierungen & Hover</h2>
+                        <p>
+                            Hier steht normaler Text. Wichtige Begriffe können <strong class="highlight">hervorgehoben</strong> werden.
+                            Manchmal möchte man zusätzliche Informationen für Abkürzungen wie
+                            <span class="tooltip" data-tippy-content="HyperText Markup Language">HTML</span> oder
+                            <span class="tooltip" data-tippy-content="Cascading Style Sheets">CSS</span>
+                            bereitstellen, die beim Überfahren mit der Maus erscheinen.
+                        </p>
+                    </section>
+
+                    <section id="graphics">
+                        <h2>Grafiken einbinden</h2>
+                        <p>Bilder können einfach mit Beschreibung eingebunden werden:</p>
+                        <figure>
+                            <img src="images/placeholder.png" alt="Ein Platzhalterbild">
+                            <figcaption>Abb. 1: Dies ist ein Platzhalter. Ersetze ihn durch ein relevantes Bild.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section id="math">
+                        <h2>Mathematische Darstellungen</h2>
+                        <p>
+                            Mit MathJax lassen sich Formeln inline, wie $E = mc^2$, oder als eigener Block darstellen:
+                            $$ \frac{1}{n} \sum_{i=1}^{n} x_i $$
+                            Auch komplexere Ausdrücke wie $\LaTeX$ sind möglich:
+                            $$ \mathbf{F} = \frac{d\mathbf{p}}{dt} = \frac{d(m\mathbf{v})}{dt} = m\frac{d\mathbf{v}}{dt} = m\mathbf{a} $$
+                        </p>
+                        <h3>Diagramme</h3>
+                        <p>Mit Chart.js können verschiedene Diagrammtypen erstellt werden. Hier ein Beispiel:</p>
+                        <div class="chart-container">
+                          <canvas id="myBarChart"></canvas>
+                        </div>
+                    </section>
+
+                    <section id="quiz">
+                        <h2>Multiple Choice Fragen</h2>
+                        <form id="beispiel-quiz-form">
+                            <div class="question" data-question-id="q1">
+                                <p><strong>Frage 1:</strong> Was ist die Hauptstadt von Deutschland?</p>
+                                <label><input type="radio" name="q1" value="a"> Hamburg</label><br>
+                                <label><input type="radio" name="q1" value="b"> München</label><br>
+                                <label><input type="radio" name="q1" value="c"> Berlin</label><br>
+                            </div>
+                            <div class="question" data-question-id="q2">
+                                <p><strong>Frage 2:</strong> Welches Element wird für die wichtigste Überschrift in HTML verwendet?</p>
+                                <label><input type="radio" name="q2" value="a"> &lt;h6&gt;</label><br>
+                                <label><input type="radio" name="q2" value="b"> &lt;h1&gt;</label><br>
+                                <label><input type="radio" name="q2" value="c"> &lt;p&gt;</label><br>
+                            </div>
+                            <button type="button" class="quiz-button" onclick="handleCheckBeispielQuiz()">Antworten prüfen</button>
+                            <div id="quiz-feedback" class="feedback-message" style="display: none;"></div>
+                        </form>
+                    </section>
+
+                    <section id="game">
+                        <h2>Kleines Lernspiel (Platzhalter)</h2>
+                        <p>Dieser Bereich ist für ein kleines Lernspiel vorgesehen...</p>
+                        <div id="game-container">
+                            Hier Spielinhalt einfügen oder per JavaScript generieren.
+                        </div>
+                    </section>
+
+                    <section id="true-false-quiz">
+                        <h2>Überprüfung: Richtig/Falsch</h2>
+                        <form id="beispiel-tf-form">
+                            <div class="question" data-question-id="tf1">
+                                <p><strong>Aussage 1:</strong> Die Erde ist eine Scheibe.</p>
+                                <label><input type="radio" name="tf1" value="true"> Richtig</label><br>
+                                <label><input type="radio" name="tf1" value="false"> Falsch</label><br>
+                                <div id="feedback-tf1" class="feedback-message" style="display: none; margin-top: 5px;"></div>
+                            </div>
+                            <button type="button" class="quiz-button" onclick="handleCheckTrueFalse('tf1', false, 'feedback-tf1')">Antwort prüfen</button>
+                        </form>
+                    </section>
+
+                    <section id="fill-blank-quiz">
+                        <h2>Überprüfung: Lückentext</h2>
+                        <form id="beispiel-luecken-form">
+                            <div class="fill-blank-question">
+                                <p>
+                                    Die Hauptstadt von Frankreich ist
+                                    <input type="text" id="luecke_1" size="15" aria-label="Lücke 1">.
+                                    Der Eiffelturm besteht hauptsächlich aus
+                                    <input type="text" id="luecke_2" size="10" aria-label="Lücke 2">.
+                                </p>
+                                <div id="feedback-luecken" class="feedback-message" style="display: none;"></div>
+                            </div>
+                             <button type="button" class="quiz-button" onclick="handleCheckFillBlank()">Lücken prüfen</button>
+                        </form>
+                    </section>
+
+                    <section id="matching-quiz">
+                        <h2>Überprüfung: Zuordnung</h2>
+                        <form id="beispiel-zuordnung-form">
+                            <p>Ordne die Länder den richtigen Hauptstädten zu:</p>
+                            <div class="matching-item">
+                                <label for="match_land_1">Deutschland:</label>
+                                <select id="match_land_1" name="match_land_1">
+                                    <option value="">-- Bitte wählen --</option>
+                                    <option value="paris">Paris</option>
+                                    <option value="berlin">Berlin</option>
+                                    <option value="rom">Rom</option>
+                                </select>
+                            </div>
+                            <div class="matching-item">
+                                <label for="match_land_2">Italien:</label>
+                                <select id="match_land_2" name="match_land_2">
+                                    <option value="">-- Bitte wählen --</option>
+                                    <option value="paris">Paris</option>
+                                    <option value="berlin">Berlin</option>
+                                    <option value="rom">Rom</option>
+                                </select>
+                            </div>
+                             <div id="feedback-zuordnung" class="feedback-message" style="display: none; margin-top: 10px;"></div>
+                             <button type="button" class="quiz-button" onclick="handleCheckMatching()">Zuordnung prüfen</button>
+                        </form>
+                    </section>
+
+                    <section id="flashcards">
+                        <h2>Lernspiel: Karteikarten</h2>
+                        <div class="flashcard-controls">
+                             <button onclick="prevFlashcard()" id="prev-card-btn" disabled>&larr; Vorherige</button>
+                             <span id="card-counter">Karte 1 / X</span>
+                             <button onclick="nextFlashcard()" id="next-card-btn">Nächste &rarr;</button>
+                        </div>
+                        <div class="flashcard-container">
+                             <div class="flashcard" onclick="flipFlashcard()" title="Klicken zum Umdrehen">
+                                <div class="flashcard-front">Begriff lädt...</div>
+                                <div class="flashcard-back">Definition lädt...</div>
+                            </div>
+                        </div>
+                        <div id="feedback-flashcard" class="feedback-message" style="display: none;"></div>
+                    </section>
+
+                    <section id="memory-game">
+                        <h2>Lernspiel: Memory</h2>
+                        <div class="memory-controls">
+                             <button onclick="handleStartNewMemoryGame()">Neues Spiel starten</button>
+                            <span id="memory-status">Züge: 0 | Gefunden: 0</span>
+                        </div>
+                        <div id="memory-game-board" class="memory-game-board">
+                            <p>Klicke auf "Neues Spiel starten".</p>
+                        </div>
+                        <div id="feedback-memory" class="feedback-message" style="display: none;"></div>
+                    </section>
+
+                </article> </main> </div> <footer>
+             <p>&copy; 2025 Jens Keutgen / Berufskolleg Platz der Republik für Technik und Medien | <a href="../../datenschutz.html">Datenschutz</a></p>
+        </footer>
+
+    </div> <script src="../../js/interactive.js"></script>
+    <script src="../../js/game-logic.js"></script>
+
+    <script>
+        // === Seiten-spezifische Daten (Beispiele) ===
+        const flashcardsForThisPage = [
+            { term: "HTML", definition: "HyperText Markup Language - Strukturiert Webinhalte." },
+            { term: "CSS", definition: "Cascading Style Sheets - Gestaltet das Aussehen von Webinhalten." },
+            { term: "JavaScript", definition: "Programmiersprache - Macht Webseiten interaktiv." },
+            { term: "DOM", definition: "Document Object Model - Programmierschnittstelle für HTML-Dokumente."}
+        ];
+        const memoryItemsForThisPage = ['🍎', '🍌', '🍇', '🍊', '🍓', '🥝'];
+        const lueckenInfos = { ids: ['luecke_1', 'luecke_2'], answers: ['Paris', 'Eisen'], feedbackId: 'feedback-luecken' };
+        const zuordnungInfos = { mapping: {'match_land_1': 'berlin', 'match_land_2': 'rom'}, feedbackId: 'feedback-zuordnung' };
+        const beispielQuizAnswers = { q1: 'c', q2: 'b' };
+
+        // === Initialisierung beim Laden der Seite ===
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Beispiel-Skript: DOMContentLoaded.");
+
+            // 1. Chart.js initialisieren
+            const ctx = document.getElementById('myBarChart');
+            if (ctx) {
+                try {
+                    new Chart(ctx, { /* Chart Config */ });
+                 } catch (e) { console.error("Chart.js Fehler:", e); }
+            } else { console.warn("Canvas 'myBarChart' nicht gefunden."); }
+
+            // 2. Flashcards initialisieren
+            if (document.querySelector('.flashcard-container') && typeof setupFlashcards === 'function') {
+                 setupFlashcards('.flashcard', flashcardsForThisPage, 'card-counter', 'prev-card-btn', 'next-card-btn');
+            } else { console.warn("Flashcard-Container nicht gefunden oder setupFlashcards nicht verfügbar."); }
+
+            // 3. Tooltips initialisieren
+            if (typeof initializeTooltips === 'function') {
+                initializeTooltips();
+            } else { console.warn("initializeTooltips Funktion nicht verfügbar."); }
+
+            // 4. Platzhalter für Spiel-Container
+            const gameContainer = document.getElementById('game-container');
+             if (gameContainer) {
+                 gameContainer.innerHTML = '<p>Hier könnte dein eigenes Spiel geladen werden.</p>';
+                 console.log("Spiel-Container gefunden.");
+             }
+
+            // --- Event Listener für den Menü-Toggle-Button ---
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const sideMenu = document.getElementById('side-menu');
+            const mainContent = document.getElementById('main-content'); // Brauchen wir hier nicht direkt
+
+            if (menuToggleBtn && sideMenu) {
+                menuToggleBtn.addEventListener('click', () => {
+                    sideMenu.classList.toggle('menu-open');
+                    document.body.classList.toggle('side-menu-active');
+                    const isExpanded = sideMenu.classList.contains('menu-open');
+                    menuToggleBtn.setAttribute('aria-expanded', isExpanded);
+                });
+
+                 // Menü schließen bei Klick auf Menüpunkt
+                 sideMenu.querySelectorAll('a').forEach(link => {
+                     link.addEventListener('click', () => {
+                         if (sideMenu.classList.contains('menu-open')) {
+                            sideMenu.classList.remove('menu-open');
+                            document.body.classList.remove('side-menu-active');
+                            menuToggleBtn.setAttribute('aria-expanded', 'false');
+                         }
+                     });
+                 });
+
+                  // Menü schließen bei Klick außerhalb
+                  document.addEventListener('click', (event) => {
+                    if (sideMenu.classList.contains('menu-open') &&
+                        !sideMenu.contains(event.target) &&
+                        !menuToggleBtn.contains(event.target)) {
+                           sideMenu.classList.remove('menu-open');
+                           document.body.classList.remove('side-menu-active');
+                           menuToggleBtn.setAttribute('aria-expanded', 'false');
+                    }
+                 });
+
+            } else {
+                console.warn("Menü-Toggle-Button oder Seitenmenü nicht gefunden.");
+            }
+
+        }); // Ende DOMContentLoaded
+
+
+        // === Wrapper-Funktionen für HTML onclick-Events ===
+        function handleCheckBeispielQuiz() {
+            console.log("Prüfe Beispiel Quiz...");
+            const form = document.getElementById('beispiel-quiz-form');
+            let correctCount = 0;
+            let totalQuestions = 0;
+            const feedbackElement = document.getElementById('quiz-feedback');
+            if (feedbackElement) feedbackElement.style.display = 'none';
+            form.querySelectorAll('.question').forEach(qDiv => { /* Reset styles */ });
+            for (const questionId in beispielQuizAnswers) { /* Check answers */ }
+            const message = `Du hast ${correctCount} von ${totalQuestions} Fragen richtig beantwortet.`;
+            if(typeof displayFeedback === 'function') { displayFeedback('quiz-feedback', message, correctCount === totalQuestions); }
+        }
+        function handleCheckTrueFalse(radioGroupName, correctAnswer, feedbackId) {
+            if (typeof checkTrueFalseLogic === 'function' && typeof displayFeedback === 'function') {
+               const result = checkTrueFalseLogic(radioGroupName, correctAnswer);
+               displayFeedback(feedbackId, result.message, result.isCorrect);
+            } else { console.error("Logik/Feedback für R/F nicht gefunden!");}
+        }
+        function handleCheckFillBlank() {
+            if (typeof checkFillBlankLogic === 'function' && typeof displayFeedback === 'function') {
+               const result = checkFillBlankLogic(lueckenInfos.ids, lueckenInfos.answers);
+               const detailedMessage = result.message + (result.feedbackMessages.length > 0 ? '\nHinweise:\n' + result.feedbackMessages.join('\n') : '');
+               displayFeedback(lueckenInfos.feedbackId, detailedMessage, result.allCorrect);
+             } else { console.error("Logik/Feedback für Lückentext nicht gefunden!");}
+        }
+        function handleCheckMatching() {
+             if (typeof checkMatchingLogic === 'function' && typeof displayFeedback === 'function') {
+                const result = checkMatchingLogic(zuordnungInfos.mapping);
+                displayFeedback(zuordnungInfos.feedbackId, result.message, result.allCorrect);
+             } else { console.error("Logik/Feedback für Zuordnung nicht gefunden!");}
+        }
+        function handleStartNewMemoryGame() {
+            if (typeof setupMemoryGame === 'function') {
+               setupMemoryGame('memory-game-board', 'memory-status', 'feedback-memory', memoryItemsForThisPage);
+            } else {
+                 console.error("setupMemoryGame Funktion nicht gefunden!");
+                 if(typeof displayFeedback === 'function') { displayFeedback('feedback-memory', "Fehler: Spiellogik konnte nicht geladen werden.", false); }
+            }
+        }
+        function flipFlashcard() {
+             if (typeof _flashcardElements !== 'undefined' && _flashcardElements.card) {
+                 _flashcardElements.card.classList.toggle('flipped');
+             } else { console.warn("Flashcard-Elemente nicht initialisiert oder flipFlashcard Logik fehlt."); }
+         }
+    </script>
+
+</body>
+</html>

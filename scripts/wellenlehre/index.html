@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physik: Wellenlehre</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']], // Standard LaTeX-Inline-Delimiter
+          displayMath: [['$$', '$$'], ['\\[', '\\]']] // Standard LaTeX-Display-Delimiter
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+</head>
+<body>
+    <div class="page-container">
+        <header class="script-header">
+             <h1>Physik: Wellenlehre</h1>
+             <a href="../../index.html" class="back-link">Zurück zur Übersicht</a>
+        </header>
+
+        <main>
+            <article class="script-content">
+
+                <section id="einleitung">
+                    <h2>Einleitung: Was ist eine Welle?</h2>
+                    <p>
+                        Stell dir vor, du wirfst einen Stein ins Wasser. Von der Eintauchstelle breiten sich Kreise aus – das sind Wasserwellen. Oder denk an den Schall, der von einer Gitarrensaite zu deinem Ohr gelangt. Auch Licht, das uns von der Sonne erreicht, ist eine Welle.
+                    </p>
+                    <p>
+                        Physikalisch gesehen ist eine <strong class="highlight">Welle</strong> eine sich räumlich ausbreitende <span class="tooltip" data-tippy-content="Eine periodische Veränderung einer physikalischen Größe an einem festen Ort.">Schwingung</span>. Entscheidend dabei ist:
+                        <strong class="highlight">Wellen transportieren Energie, aber keine Materie.</strong>
+                        Die Wasserteilchen schwingen zum Beispiel nur auf und ab, wandern aber (fast) nicht mit der Welle mit. Ähnlich schwingen Luftteilchen beim Schall nur hin und her.
+                    </p>
+                </section>
+
+                <section id="arten">
+                    <h2>Arten von Wellen</h2>
+                    <p>Man unterscheidet Wellen hauptsächlich nach der Schwingungsrichtung der Teilchen relativ zur Ausbreitungsrichtung der Welle:</p>
+                    <ul>
+                        <li>
+                            <strong>Transversalwellen (Querwellen):</strong> Die Schwingung erfolgt <span class="tooltip" data-tippy-content="Im 90°-Winkel.">senkrecht</span> zur Ausbreitungsrichtung.
+                            <br><em>Beispiele:</em> Wellen auf einer Wasseroberfläche, Seilwellen, Lichtwellen (elektromagnetische Wellen).
+                             <figure>
+                                <img src="images/transversalwelle.gif" alt="Animation einer Transversalwelle">
+                                <figcaption>Abb. 1: Schema einer Transversalwelle (Schwingung senkrecht zur Ausbreitung).</figcaption>
+                             </figure>
+                        </li>
+                        <li>
+                            <strong>Longitudinalwellen (Längswellen):</strong> Die Schwingung erfolgt <span class="tooltip" data-tippy-content="In die gleiche oder entgegengesetzte Richtung.">parallel</span> zur Ausbreitungsrichtung. Es entstehen Zonen mit hoher Teilchendichte (<span class="tooltip" data-tippy-content="Hohe Dichte/Druck">Verdichtungen</span>) und niedriger Teilchendichte (<span class="tooltip" data-tippy-content="Niedrige Dichte/Druck">Verdünnungen</span>).
+                            <br><em>Beispiele:</em> Schallwellen in Luft, Wellen entlang einer Schraubenfeder (Slinky).
+                            <figure>
+                                <img src="images/longitudinalwelle.gif" alt="Animation einer Longitudinalwelle">
+                                <figcaption>Abb. 2: Schema einer Longitudinalwelle (Schwingung parallel zur Ausbreitung).</figcaption>
+                             </figure>
+                        </li>
+                    </ul>
+                     <div class="question" data-question-id="wellenart">
+                        <p><strong>Frage 1:</strong> Welche Art von Welle ist Schall in der Luft?</p>
+                        <label><input type="radio" name="q_wellenart" value="a"> Transversalwelle</label><br>
+                        <label><input type="radio" name="q_wellenart" value="b"> Longitudinalwelle</label><br>
+                        <label><input type="radio" name="q_wellenart" value="c"> Weder noch, Schall ist keine Welle</label><br>
+                        <div id="feedback-wellenart" class="feedback-message" style="display: none; margin-top: 5px;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckSimpleRadio('q_wellenart', 'b', 'feedback-wellenart', 'Richtig! Schallwellen in Luft sind Verdichtungen und Verdünnungen der Luftteilchen in Ausbreitungsrichtung.', 'Falsch. Denk daran, wie sich Schall ausbreitet: durch Verdichtung und Verdünnung der Luftteilchen.')">Antwort prüfen</button>
+                    </div>
+                </section>
+
+                <section id="kenngroessen">
+                    <h2>Wichtige Kenngrößen einer Welle</h2>
+                    <p>Um Wellen mathematisch zu beschreiben, verwenden wir folgende Größen:</p>
+                    <figure>
+                         <img src="images/wellenparameter.png" alt="Diagramm einer Welle mit Parametern" style="max-width: 500px;">
+                         <figcaption>Abb. 3: Parameter einer (Transversal-)Welle.</figcaption>
+                    </figure>
+                    <ul>
+                        <li><strong>Amplitude ($A$):</strong> Die <span class="tooltip" data-tippy-content="Maximale Auslenkung aus der Ruhelage.">maximale Elongation</span> der Schwingung aus der Ruhelage. Sie bestimmt z.B. die Lautstärke beim Schall oder die Helligkeit beim Licht. Einheit: oft Meter [m].</li>
+                        <li><strong>Wellenlänge ($\lambda$):</strong> Der räumliche Abstand zweier aufeinanderfolgender Punkte, die sich im gleichen Schwingungszustand befinden (z.B. Abstand von Wellenberg zu Wellenberg). Einheit: Meter [m]. Das Symbol ist der griechische Buchstabe Lambda.</li>
+                        <li><strong>Periodendauer ($T$):</strong> Die Zeit, die ein einzelnes Teilchen für eine vollständige Schwingung benötigt. Oder: Die Zeit, die die Welle braucht, um sich um eine Wellenlänge fortzubewegen. Einheit: Sekunden [s].</li>
+                        <li><strong>Frequenz ($f$):</strong> Die Anzahl der vollständigen Schwingungen pro Sekunde. Sie ist der Kehrwert der Periodendauer: $f = \frac{1}{T}$. Einheit: Hertz [Hz] ($1 \text{ Hz} = 1/\text{s}$). Die Frequenz bestimmt z.B. die Tonhöhe beim Schall oder die Farbe beim Licht.</li>
+                        <li><strong>Ausbreitungsgeschwindigkeit ($c$):</strong> Die Geschwindigkeit, mit der sich ein bestimmter Schwingungszustand (z.B. ein Wellenberg) im Raum ausbreitet. Einheit: Meter pro Sekunde [m/s]. Oft wird statt $c$ auch $v$ verwendet.</li>
+                    </ul>
+
+                     <div class="fill-blank-question">
+                        <p><strong>Frage 2:</strong> Eine Welle hat eine Periodendauer von $T = 2 \text{ s}$. Wie groß ist ihre Frequenz $f$?</p>
+                        <p>$f = \frac{1}{T} = \frac{1}{2 \text{ s}} = $ <input type="text" id="luecke_frequenz" size="5" aria-label="Frequenz berechnen"> Hz.</p>
+                        <div id="feedback-frequenz" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankSingle('luecke_frequenz', '0.5', 'feedback-frequenz', 'Richtig! $f = 1 / (2 \text{ s}) = 0.5 \text{ Hz}$.', 'Falsch. Die Frequenz ist der Kehrwert der Periodendauer.')">Antwort prüfen</button>
+                    </div>
+                </section>
+
+                <section id="grundgleichung">
+                    <h2>Grundgleichung der Wellenlehre</h2>
+                    <p>
+                        Die Ausbreitungsgeschwindigkeit $c$, die Wellenlänge $\lambda$ und die Frequenz $f$ (bzw. Periodendauer $T$) einer Welle sind nicht unabhängig voneinander. Sie sind durch die <strong class="highlight">Grundgleichung der Wellenlehre</strong> verknüpft.
+                    </p>
+                    <p>
+                        Überlegung: In der Zeit $T$ (einer Periodendauer) legt die Welle genau die Strecke $\lambda$ (einer Wellenlänge) zurück. Da Geschwindigkeit = Weg / Zeit ist, gilt:
+                    </p>
+                    <span class="math-block"> c = \frac{\lambda}{T} </span>
+                    <p>
+                        Da $f = 1/T$ ist, kann man die Gleichung auch schreiben als:
+                    </p>
+                    <span class="math-block"> c = \lambda \cdot f </span>
+                    <p>
+                        Diese Gleichung gilt für alle Arten von Wellen! Sie besagt: Je größer die Frequenz, desto kleiner die Wellenlänge (bei konstanter Ausbreitungsgeschwindigkeit) und umgekehrt.
+                    </p>
+                    <div class="question" data-question-id="grundgl">
+                        <p><strong>Frage 3:</strong> Eine Welle hat eine Wellenlänge $\lambda = 2 \text{ m}$ und eine Frequenz $f = 100 \text{ Hz}$. Wie groß ist ihre Ausbreitungsgeschwindigkeit $c$?</p>
+                        <label><input type="radio" name="q_grundgl" value="a"> $50 \text{ m/s}$</label><br>
+                        <label><input type="radio" name="q_grundgl" value="b"> $0.02 \text{ m/s}$</label><br>
+                        <label><input type="radio" name="q_grundgl" value="c"> $200 \text{ m/s}$</label><br>
+                        <div id="feedback-grundgl" class="feedback-message" style="display: none; margin-top: 5px;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckSimpleRadio('q_grundgl', 'c', 'feedback-grundgl', 'Richtig! $c = \lambda \cdot f = 2 \text{ m} \cdot 100 \text{ Hz} = 200 \text{ m/s}$.', 'Falsch. Verwende die Formel $c = \lambda \cdot f$.')">Antwort prüfen</button>
+                    </div>
+                </section>
+
+                <section id="simulation1">
+                    <h2>Simulation 1: Transversalwelle am Seil</h2>
+                    <p>
+                        Stell dir ein langes Seil vor, das an einem Ende befestigt ist. Du hältst das andere Ende und bewegst deine Hand schnell auf und ab. Ein "Wellenberg" läuft entlang des Seils zum festen Ende.
+                    </p>
+                     <figure>
+                         <img src="images/transversalwelle.gif" alt="Simulation Seilwelle" style="border: 1px solid #ccc; padding: 5px; max-width: 400px;">
+                         <figcaption>Abb. 4: Entstehung einer Transversalwelle am Seil.</figcaption>
+                    </figure>
+                    <p>
+                       In einer Simulation könntest du sehen:
+                    </p>
+                    <ul>
+                       <li>Bewegst du die Hand schneller (höhere <strong class="highlight">Frequenz</strong> $f$), wird der Abstand zwischen den Wellenbergen (<strong class="highlight">Wellenlänge</strong> $\lambda$) kürzer.</li>
+                       <li>Machst du eine größere Auslenkung mit der Hand (größere <strong class="highlight">Amplitude</strong> $A$), werden die Wellenberge höher, aber die Geschwindigkeit $c$ und die Wellenlänge $\lambda$ ändern sich dadurch nicht wesentlich.</li>
+                       <li>Die Ausbreitungsgeschwindigkeit $c$ hängt vom Seil ab (Spannung, Masse).</li>
+                    </ul>
+                    <div class="question" data-question-id="sim1">
+                        <p><strong>Frage 4:</strong> Was passiert mit der Wellenlänge $\lambda$ einer Seilwelle, wenn du die Frequenz $f$ erhöhst, mit der du das Seilende bewegst (bei gleichbleibender Ausbreitungsgeschwindigkeit $c$)?</p>
+                        <label><input type="radio" name="q_sim1" value="a"> Die Wellenlänge $\lambda$ wird größer.</label><br>
+                        <label><input type="radio" name="q_sim1" value="b"> Die Wellenlänge $\lambda$ bleibt gleich.</label><br>
+                        <label><input type="radio" name="q_sim1" value="c"> Die Wellenlänge $\lambda$ wird kleiner.</label><br>
+                        <div id="feedback-sim1" class="feedback-message" style="display: none; margin-top: 5px;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckSimpleRadio('q_sim1', 'c', 'feedback-sim1', 'Richtig! Aus $c = \lambda \cdot f$ folgt $\lambda = c/f$. Wenn $f$ steigt und $c$ konstant ist, muss $\lambda$ sinken.', 'Falsch. Denk an die Grundgleichung $c = \lambda \cdot f$. Was passiert mit $\lambda$, wenn $f$ größer wird und $c$ konstant bleibt?')">Antwort prüfen</button>
+                    </div>
+                </section>
+
+                 <section id="simulation2">
+                    <h2>Simulation 2: Longitudinalwelle (Feder)</h2>
+                    <p>
+                        Stell dir eine lange, weiche Schraubenfeder (Slinky) vor, die auf dem Tisch liegt. Du stößt ein Ende kurz in Längsrichtung an. Eine Verdichtung der Federwicklungen läuft entlang der Feder.
+                    </p>
+                     <figure>
+                         <img src="images/longitudinalwelle.gif" alt="Simulation Federwelle" style="border: 1px solid #ccc; padding: 5px; max-width: 400px;">
+                         <figcaption>Abb. 5: Entstehung einer Longitudinalwelle an einer Feder.</figcaption>
+                    </figure>
+                     <p>
+                       In einer Simulation könntest du sehen:
+                    </p>
+                    <ul>
+                       <li>Die einzelnen Federwicklungen bewegen sich nur kurz vor und zurück um ihre Ruhelage, wandern aber nicht mit der Welle mit.</li>
+                       <li>Die Verdichtung (hoher Druck) und Verdünnung (niedriger Druck) breiten sich mit der Geschwindigkeit $c$ aus.</li>
+                       <li>Der Abstand zwischen zwei Verdichtungen ist die Wellenlänge $\lambda$.</li>
+                    </ul>
+                    <div class="fill-blank-question">
+                        <p><strong>Frage 5:</strong> Schallwellen in Luft sind Longitudinalwellen. Bei einem Ton mit der Frequenz $f = 440 \text{ Hz}$ beträgt die Schallgeschwindigkeit in Luft etwa $c = 343 \text{ m/s}$. Berechne die Wellenlänge $\lambda$ dieses Tons.</p>
+                        <p>Formel: $\lambda = \frac{c}{f}$</p>
+                        <p>$\lambda = \frac{343 \text{ m/s}}{440 \text{ Hz}} \approx $ <input type="text" id="luecke_lambda" size="6" aria-label="Wellenlänge berechnen"> m. (Runde auf zwei Nachkommastellen)</p>
+                        <div id="feedback-lambda" class="feedback-message" style="display: none;"></div>
+                        <button type="button" class="quiz-button" onclick="handleCheckFillBlankSingle('luecke_lambda', '0.78', 'feedback-lambda', 'Richtig! $\lambda = 343 / 440 \approx 0.78 \text{ m}$.', 'Falsch. Berechne $c / f$. Achte auf die Einheiten ($Hz = 1/s$).')">Antwort prüfen</button>
+                    </div>
+                 </section>
+
+                 <section id="zusammenfassung">
+                    <h2>Zusammenfassung & Formeln</h2>
+                    <ul>
+                        <li>Wellen transportieren Energie, nicht Materie.</li>
+                        <li>Transversalwelle: Schwingung $\perp$ Ausbreitung (z.B. Licht).</li>
+                        <li>Longitudinalwelle: Schwingung $\parallel$ Ausbreitung (z.B. Schall).</li>
+                        <li>Amplitude $A$: Maximale Auslenkung.</li>
+                        <li>Wellenlänge $\lambda$: Räumliche Periode.</li>
+                        <li>Periodendauer $T$: Zeitliche Periode.</li>
+                        <li>Frequenz $f$: Schwingungen pro Zeit ($f = 1/T$).</li>
+                        <li>Ausbreitungsgeschwindigkeit $c$: Geschwindigkeit der Welle.</li>
+                        <li><strong>Grundgleichung:</strong> $c = \lambda / T = \lambda \cdot f$.</li>
+                    </ul>
+                 </section>
+
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Dein Name / Deine Organisation | <a href="../../datenschutz.html">Datenschutz</a></p>
+        </footer>
+
+    </div>
+
+    <script src="../../js/interactive.js"></script>
+    <script>
+        // Initialisiere Tooltips, wenn Tippy.js geladen ist
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initializeTooltips === 'function') {
+                initializeTooltips();
+            } else if (typeof tippy === 'function') {
+                // Fallback, falls initializeTooltips nicht in interactive.js definiert ist
+                 tippy('.tooltip', {
+                     content: (reference) => reference.getAttribute('data-tippy-content') || 'Keine Beschreibung',
+                     animation: 'scale-subtle',
+                     theme: 'custom-light', // Nutzt das Theme aus style.css
+                     placement: 'top',
+                 });
+            }
+        });
+
+       // --- Einfache Quiz-Prüffunktionen (ähnlich wie in den Beispielen) ---
+       // Diese könnten auch in einer zentralen JS-Datei sein, aber hier zur Einfachheit
+
+       /**
+        * Prüft eine einfache Multiple-Choice-Frage (Radio Buttons).
+        * @param {string} radioGroupName - Der Name der Radio-Button-Gruppe.
+        * @param {string} correctAnswerValue - Der 'value' des korrekten Radio-Buttons.
+        * @param {string} feedbackId - Die ID des Elements zur Anzeige des Feedbacks.
+        * @param {string} correctMessage - Nachricht bei richtiger Antwort.
+        * @param {string} incorrectMessage - Nachricht bei falscher Antwort.
+        */
+       function handleCheckSimpleRadio(radioGroupName, correctAnswerValue, feedbackId, correctMessage, incorrectMessage) {
+           const selectedInput = document.querySelector(`input[name="${radioGroupName}"]:checked`);
+           let message = "Bitte wähle eine Antwort aus.";
+           let isSuccess = null; // null für neutrales Feedback
+
+           if (selectedInput) {
+               if (selectedInput.value === correctAnswerValue) {
+                   message = correctMessage;
+                   isSuccess = true;
+               } else {
+                   message = incorrectMessage;
+                   isSuccess = false;
+               }
+           }
+           // Globale Feedback-Funktion aus interactive.js verwenden
+           if (typeof displayFeedback === 'function') {
+              displayFeedback(feedbackId, message, isSuccess);
+           } else {
+              // Fallback, falls interactive.js nicht geladen oder Funktion nicht da
+              const feedbackElement = document.getElementById(feedbackId);
+              if(feedbackElement) {
+                  feedbackElement.textContent = message;
+                  feedbackElement.style.display = 'block';
+                  feedbackElement.style.color = isSuccess === true ? 'green' : (isSuccess === false ? 'red' : 'grey');
+              }
+           }
+       }
+
+       /**
+        * Prüft eine einzelne Lückentext-Frage.
+        * @param {string} inputId - Die ID des Input-Feldes.
+        * @param {string} correctAnswer - Die korrekte Antwort (Groß-/Kleinschreibung wird ignoriert, Leerzeichen getrimmt).
+        * @param {string} feedbackId - Die ID des Feedback-Elements.
+        * @param {string} correctMessage - Nachricht bei richtiger Antwort.
+        * @param {string} incorrectMessage - Nachricht bei falscher Antwort.
+        */
+       function handleCheckFillBlankSingle(inputId, correctAnswer, feedbackId, correctMessage, incorrectMessage) {
+            const inputElement = document.getElementById(inputId);
+            let message = `Fehler: Input-Feld mit ID '${inputId}' nicht gefunden.`;
+            let isSuccess = false;
+
+            if (inputElement) {
+                const userAnswer = inputElement.value.trim().toLowerCase().replace(',', '.'); // Komma zu Punkt für Dezimalzahlen
+                const correctAnswerLower = correctAnswer.toLowerCase();
+
+                if (userAnswer === correctAnswerLower) {
+                    message = correctMessage;
+                    isSuccess = true;
+                    inputElement.style.border = '2px solid green';
+                } else {
+                    message = incorrectMessage + ` (Erwartet: ${correctAnswer})`;
+                    isSuccess = false;
+                    inputElement.style.border = '2px solid red';
+                }
+            }
+             // Globale Feedback-Funktion aus interactive.js verwenden
+             if (typeof displayFeedback === 'function') {
+                 displayFeedback(feedbackId, message, isSuccess);
+             } else {
+                 // Fallback
+                 const feedbackElement = document.getElementById(feedbackId);
+                 if(feedbackElement) {
+                     feedbackElement.textContent = message;
+                     feedbackElement.style.display = 'block';
+                     feedbackElement.style.color = isSuccess ? 'green' : 'red';
+                 }
+             }
+       }
+
+    </script>
+
+</body>
+</html>

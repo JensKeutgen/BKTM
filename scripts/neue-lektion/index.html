@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neue Lektion: Titel hier</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+      MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+</head>
+<body>
+    <div class="page-container">
+        <header class="script-header">
+             <h1>Neue Lektion: Titel hier</h1>
+             <a href="../../index.html" class="back-link">Zurück zur Übersicht</a>
+        </header>
+
+        <main>
+            <article class="script-content">
+
+                <section id="einstieg">
+                    <h2>Einstieg / Einführung</h2>
+                    <p>
+                        Hier kommt der einleitende Text zur Unterrichtsstunde hin.
+                        Du kannst Absätze, Listen und <strong class="highlight">Hervorhebungen</strong> verwenden.
+                    </p>
+                    <figure>
+                        <img src="images/einstiegsbild.png" alt="Beschreibung des Bildes">
+                        <figcaption>Abb. 1: Eine passende Grafik für den Einstieg.</figcaption>
+                    </figure>
+                    <p>
+                        Weitere Erklärungen oder Überleitungen zu den Aufgaben.
+                    </p>
+                </section>
+
+                <section id="aufgaben-sequenziell">
+                    <h2>Aufgaben (Sequenziell)</h2>
+                    <div class="task" data-task-id="seq_1">
+                        <h3>Aufgabe 1</h3>
+                        <p>Beschreibung der ersten Aufgabe...</p>
+                        <div class="fill-blank-question">
+                           <p> $2 + 2 = $ <input type="text" id="seq_aufg1_luecke" size="3">.</p>
+                           <div id="feedback-seq1" class="feedback-message" style="display: none;"></div>
+                           <button type="button" class="quiz-button" onclick="handleCheckFillBlankSingle('seq_aufg1_luecke', '4', 'feedback-seq1', 'Korrekt!', 'Versuche es nochmal.')">Prüfen</button>
+                        </div>
+                    </div>
+                    <hr style="margin: 30px 0;"> <div class="task" data-task-id="seq_2">
+                        <h3>Aufgabe 2</h3>
+                        <p>Beschreibung der zweiten Aufgabe...</p>
+                        </div>
+                     </section>
+
+                <section id="aufgaben-stationen">
+                    <h2>Aufgaben (Stationenlernen)</h2>
+                    <p>Bearbeite die folgenden Stationen in beliebiger Reihenfolge.</p>
+                    <div class="stationen-container">
+                        <div class="station">
+                            <h3>Station A: Thema 1</h3>
+                            <p>Aufgabenstellung für Station A...</p>
+                            <details>
+                                <summary>Aufgabe anzeigen/verbergen</summary>
+                                <div class="question" style="margin-top:10px;">
+                                    <p>Frage zu Station A...</p>
+                                    <label><input type="radio" name="station_a" value="1"> Antwort 1</label><br>
+                                    <label><input type="radio" name="station_a" value="2"> Antwort 2</label><br>
+                                    <div id="feedback-stA" class="feedback-message" style="display: none;"></div>
+                                    <button type="button" class="quiz-button" onclick="handleCheckSimpleRadio('station_a', '1', 'feedback-stA', 'Richtig!', 'Falsch.')">Prüfen</button>
+                                </div>
+                            </details>
+                        </div>
+                         <div class="station">
+                            <h3>Station B: Thema 2</h3>
+                            <p>Aufgabenstellung für Station B...</p>
+                            <details>
+                                <summary>Aufgabe anzeigen/verbergen</summary>
+                                <p>...</p>
+                            </details>
+                        </div>
+                         <div class="station">
+                            <h3>Station C: Thema 3</h3>
+                            <p>Aufgabenstellung für Station C...</p>
+                             <details>
+                                <summary>Aufgabe anzeigen/verbergen</summary>
+                                <p>...</p>
+                            </details>
+                        </div>
+                    </div>
+                    </section>
+
+                <section id="aufgaben-auswahl">
+                    <h2>Aufgaben (Auswahl)</h2>
+                    <p>Wähle aus den folgenden 4 Aufgaben bitte <strong>2</strong> aus, die du bearbeiten möchtest.</p>
+                    <form id="choice-task-form">
+                        <div class="choice-task-selection">
+                             <label><input type="checkbox" name="chosen_task" value="task1"> Aufgabe 1: Titel der Aufgabe 1</label><br>
+                             <label><input type="checkbox" name="chosen_task" value="task2"> Aufgabe 2: Titel der Aufgabe 2</label><br>
+                             <label><input type="checkbox" name="chosen_task" value="task3"> Aufgabe 3: Titel der Aufgabe 3</label><br>
+                             <label><input type="checkbox" name="chosen_task" value="task4"> Aufgabe 4: Titel der Aufgabe 4</label><br>
+                        </div>
+                        <button type="button" class="quiz-button" onclick="showSelectedTasks(2)">Auswahl anzeigen</button>
+                         <div id="choice-feedback" class="feedback-message info" style="display: none;"></div>
+
+                        <div id="selected-tasks-container" style="margin-top: 20px;">
+                             <div id="task1" class="task-content" style="display: none;">
+                                 <h3>Aufgabe 1</h3>
+                                 <p>Detaillierte Beschreibung und Inhalt von Aufgabe 1...</p>
+                                 </div>
+                              <div id="task2" class="task-content" style="display: none;">
+                                 <h3>Aufgabe 2</h3>
+                                 <p>Detaillierte Beschreibung und Inhalt von Aufgabe 2...</p>
+                             </div>
+                              <div id="task3" class="task-content" style="display: none;">
+                                 <h3>Aufgabe 3</h3>
+                                 <p>Detaillierte Beschreibung und Inhalt von Aufgabe 3...</p>
+                             </div>
+                             <div id="task4" class="task-content" style="display: none;">
+                                <h3>Aufgabe 4</h3>
+                                <p>Detaillierte Beschreibung und Inhalt von Aufgabe 4...</p>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Jens Keutgen / Berufskolleg Platz der Republik für Technik und Medien | <a href="../../datenschutz.html">Datenschutz</a></p>
+        </footer>
+
+    </div>
+
+    <script src="../../js/interactive.js"></script>
+    <script>
+        // Tooltips initialisieren, falls Tippy.js verwendet wird
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initializeTooltips === 'function') {
+                initializeTooltips();
+            }
+        });
+
+        // --- Einfache Prüffunktionen (Beispiel, ggf. aus interactive.js nutzen) ---
+        function handleCheckFillBlankSingle(inputId, correctAnswer, feedbackId, correctMessage, incorrectMessage) {
+            // Diese Funktion existiert wahrscheinlich schon in interactive.js oder game-logic.js
+            // Hier nur als Platzhalter, falls sie noch nicht zentral verfügbar ist.
+            const input = document.getElementById(inputId);
+            const feedback = document.getElementById(feedbackId);
+            if (!input || !feedback) return;
+            if (input.value.trim() === correctAnswer) {
+                 displayFeedback(feedbackId, correctMessage, true);
+                 input.style.border = '2px solid green';
+            } else {
+                 displayFeedback(feedbackId, incorrectMessage, false);
+                 input.style.border = '2px solid red';
+            }
+        }
+        function handleCheckSimpleRadio(radioGroupName, correctAnswerValue, feedbackId, correctMessage, incorrectMessage) {
+            const selectedInput = document.querySelector(`input[name="${radioGroupName}"]:checked`);
+            let message = "Bitte wähle eine Antwort aus.";
+            let isSuccess = null;
+
+            if (selectedInput) {
+                if (selectedInput.value === correctAnswerValue) {
+                    message = correctMessage;
+                    isSuccess = true;
+                } else {
+                    message = incorrectMessage;
+                    isSuccess = false;
+                }
+            }
+             displayFeedback(feedbackId, message, isSuccess);
+        }
+
+
+        // --- JavaScript für die Auswahl-Aufgaben (Variante C) ---
+        function showSelectedTasks(requiredCount) {
+            const form = document.getElementById('choice-task-form');
+            const checkboxes = form.querySelectorAll('input[name="chosen_task"]:checked');
+            const taskContainer = document.getElementById('selected-tasks-container');
+            const allTaskContents = taskContainer.querySelectorAll('.task-content');
+            const feedbackElement = document.getElementById('choice-feedback');
+
+            // Feedback resetten
+            feedbackElement.style.display = 'none';
+
+            if (checkboxes.length !== requiredCount) {
+                displayFeedback('choice-feedback', `Bitte wähle genau ${requiredCount} Aufgaben aus.`, false);
+                // Optional: Verstecke alle Aufgaben wieder, falls Auswahl ungültig wird
+                allTaskContents.forEach(content => content.style.display = 'none');
+                return;
+            }
+
+            // Alle Aufgabeninhalte zuerst verstecken
+            allTaskContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Die ausgewählten Aufgabeninhalte anzeigen
+            checkboxes.forEach(checkbox => {
+                const taskId = checkbox.value; // z.B. "task1"
+                const taskElement = document.getElementById(taskId);
+                if (taskElement) {
+                    taskElement.style.display = 'block';
+                } else {
+                    console.warn(`Aufgabeninhalt für ID '${taskId}' nicht gefunden.`);
+                }
+            });
+
+            displayFeedback('choice-feedback', `${requiredCount} Aufgaben zur Bearbeitung angezeigt.`, null); // Neutrales Feedback
+        }
+    </script>
+
+</body>
+</html>

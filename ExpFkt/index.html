@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Analyse: Exponential- vs. Logarithmusfunktion</title>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']], // Definiert $...$ für Inline-Mathe
+            displayMath: [['$$', '$$'], ['\\[', '\\]']] // Definiert $$...$$ für Display-Mathe
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+        </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Algorithmen-Analyse: Laufzeit verstehen</h1>
+    <p>In der Informatik beschreibt die Laufzeitkomplexität, wie der Ressourcenbedarf (z.B. Zeit) eines Algorithmus mit der Größe der Eingabe ($n$) wächst. Wir untersuchen zwei typische Wachstumsarten:</p>
+    <ul>
+        <li><strong>Exponentielles Wachstum:</strong> Oft bei ineffizienten Algorithmen ($f(n) = a \cdot b^n + d$).</li>
+        <li><strong>Logarithmisches Wachstum:</strong> Typisch für sehr effiziente Algorithmen wie die binäre Suche ($g(n) = a \cdot \log_b(n - c) + d$).</li>
+    </ul>
+    <p><strong>Deine Aufgabe:</strong> Finde durch Anpassen der Parameter die Graphen, die eine vorgegebene Laufzeit repräsentieren. Beantworte Fragen zu den Parametern, um den nächsten freizuschalten!</p>
+
+    <hr>
+
+    <div class="simulation-container">
+        <h2>Teil 1: Exponentielles Wachstum $f(n) = a \cdot b^n + d$</h2>
+        <p>Ein Algorithmus zeigt das Laufzeitverhalten des <strong>blauen Graphen</strong>. Passe die Parameter des <strong>roten Graphen</strong> an, bis er mit dem blauen übereinstimmt.</p>
+
+        <div class="graph-section-single">
+            <div id="graphExp" class="graph-single"></div>
+        </div>
+
+        <div class="controls-section">
+            <h3>Parameter anpassen:</h3>
+            <div id="equationExpDisplay" class="equation-display">
+                $f(n) = 1.0 \cdot 2.0^n + 0.0$ </div>
+            <div class="param-control" id="controlExpA">
+                <label for="sliderExpA">Parameter $a$:</label>
+                <input type="range" id="sliderExpA" min="-3" max="3" value="1" step="0.1" disabled>
+                <span id="valueExpA">1.0</span>
+            </div>
+            <div class="param-control" id="controlExpB">
+                <label for="sliderExpB">Parameter $b$ (Basis, $b > 0, b \neq 1$):</label>
+                <input type="range" id="sliderExpB" min="0.1" max="3" value="2" step="0.1" disabled>
+                <span id="valueExpB">2.0</span>
+            </div>
+            <div class="param-control" id="controlExpD">
+                <label for="sliderExpD">Parameter $d$:</label>
+                <input type="range" id="sliderExpD" min="-5" max="5" value="0" step="0.5" disabled>
+                <span id="valueExpD">0.0</span>
+            </div>
+        </div>
+
+        <div id="questionsExp" class="questions-section">
+            </div>
+         <div id="feedbackExp" class="feedback-section">
+             </div>
+    </div>
+
+    <hr>
+
+     <div class="simulation-container" id="logSimulation" style="display: none;"> <h2>Teil 2: Logarithmisches Wachstum $g(n) = a \cdot \log_b(n - c) + d$</h2>
+        <p>Nun betrachten wir einen effizienteren Algorithmus (blauer Graph). Oft ist es auch interessant zu wissen: "Welche Eingabegröße $n$ kann ich maximal mit $y$ Rechenschritten bearbeiten?". Das führt zur Umkehrfunktion. Finde wieder den passenden roten Graphen.</p>
+
+        <div class="graph-section-single">
+            <div id="graphLog" class="graph-single"></div>
+        </div>
+
+        <div class="controls-section">
+            <h3>Parameter anpassen:</h3>
+            <div id="equationLogDisplay" class="equation-display">
+                $g(n) = 1.0 \cdot \log_{2.0}(n - 0.0) + 0.0$ </div>
+             <div class="param-control" id="controlLogA">
+                <label for="sliderLogA">Parameter $a$:</label>
+                <input type="range" id="sliderLogA" min="-3" max="3" value="1" step="0.1" disabled>
+                <span id="valueLogA">1.0</span>
+            </div>
+             <div class="param-control" id="controlLogB">
+                <label for="sliderLogB">Parameter $b$ (Basis, $b > 0, b \neq 1$):</label>
+                <input type="range" id="sliderLogB" min="1.1" max="5" value="2" step="0.1" disabled> <span id="valueLogB">2.0</span>
+            </div>
+            <div class="param-control" id="controlLogC">
+                <label for="sliderLogC">Parameter $c$ (Asymptote bei $n=c$):</label>
+                <input type="range" id="sliderLogC" min="-5" max="5" value="0" step="0.5" disabled>
+                <span id="valueLogC">0.0</span>
+            </div>
+            <div class="param-control" id="controlLogD">
+                <label for="sliderLogD">Parameter $d$:</label>
+                <input type="range" id="sliderLogD" min="-5" max="5" value="0" step="0.5" disabled>
+                <span id="valueLogD">0.0</span>
+            </div>
+        </div>
+
+        <div id="questionsLog" class="questions-section">
+            </div>
+        <div id="feedbackLog" class="feedback-section">
+            </div>
+
+         <div id="conclusion" style="display: none;"> <h3>Verbindung der Funktionen</h3>
+            <p>Super! Du hast beide Graphen gefunden. Vergleiche die Funktionen:</p>
+            <p>Exponentiell: $f(n) = a_{exp} \cdot b_{exp}^n + d_{exp}$ (Zeit für Eingabe $n$)</p>
+            <p>Logarithmisch: $g(n) = a_{log} \cdot \log_{b_{log}}(n - c_{log}) + d_{log}$ (Zeit für Eingabe $n$, oder umgekehrt: Eingabe $n$ für Zeit $y$)</p>
+            <p>Wenn wir $d_{exp}=0$, $a_{exp}=1$, $c_{log}=0$, $d_{log}=0$ und $a_{log}=1$ setzen, sind $y = b^n$ und $y = \log_b(n)$ Umkehrfunktionen. Das bedeutet, die Frage "Wie lange ($y$) brauche ich für $n$?" wird durch die Exponentialfunktion beantwortet, und die Frage "Wie groß darf $n$ sein für eine Zeit $y$?" durch die Logarithmusfunktion (wenn man $n$ und $y$ vertauscht). Dies spiegelt sich oft in der Analyse wider: Ein exponentieller Algorithmus wird schnell unbrauchbar, während ein logarithmischer auch für sehr große Eingaben schnell bleibt.</p>
+            <div id="graphCompare" class="graph-single"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
