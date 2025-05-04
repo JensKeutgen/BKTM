@@ -11,16 +11,16 @@ const targetParamsLog = { a: 2, b: 2.5, c: 1, d: -1 }; // Beispielwerte, ggf. an
 let userParamsExp = { a: 1, b: 2, d: 0 };
 let userParamsLog = { a: 1, b: 2, c: 0, d: 0 }; // Start mit b=2, obwohl Slider bei 1.1 beginnt
 
-// Status der Parameter-Freischaltung und Fragen
+// Status der Parameter-Bearbeitung und Fragen
 let stateExp = {
     currentParam: 'a', // Startet mit Parameter 'a'
-    correctAnswers: 0,
-    unlocked: { a: true, b: false, d: false } // Nur 'a' ist am Anfang aktiv
+    correctAnswers: 0
+    // 'unlocked' wird nicht mehr verwendet
 };
 let stateLog = {
     currentParam: 'a',
-    correctAnswers: 0,
-    unlocked: { a: true, b: false, c: false, d: false }
+    correctAnswers: 0
+     // 'unlocked' wird nicht mehr verwendet
 };
 
 // --- Fragenkatalog mit LaTeX ---
@@ -179,14 +179,14 @@ function updateGraphLog() {
 // Aktualisiert die Anzeige der Exponentialgleichung
 function updateEquationDisplayExp() {
     const eqElement = document.getElementById('equationExpDisplay');
-    if (!eqElement) return; // Sicherstellen, dass Element existiert
+    if (!eqElement) return;
     const p = userParamsExp;
     const aStr = p.a.toFixed(1);
     const bStr = p.b.toFixed(1);
     const dStr = p.d === 0 ? '' : (p.d > 0 ? ` + ${p.d.toFixed(1)}` : ` - ${Math.abs(p.d).toFixed(1)}`);
 
     eqElement.innerHTML = `$f(n) = ${aStr} \\cdot ${bStr}^n${dStr}$`;
-    if (window.MathJax) { // Prüfen ob MathJax geladen ist
+    if (window.MathJax) {
         MathJax.typesetPromise([eqElement]).catch(err => console.error('MathJax typesetting error:', err));
     }
 }
@@ -194,7 +194,7 @@ function updateEquationDisplayExp() {
 // Aktualisiert die Anzeige der Logarithmusgleichung
 function updateEquationDisplayLog() {
     const eqElement = document.getElementById('equationLogDisplay');
-     if (!eqElement) return; // Sicherstellen, dass Element existiert
+     if (!eqElement) return;
     const p = userParamsLog;
     const aStr = p.a.toFixed(1);
     const bStr = p.b.toFixed(1);
@@ -202,7 +202,7 @@ function updateEquationDisplayLog() {
     const dStr = p.d === 0 ? '' : (p.d > 0 ? ` + ${p.d.toFixed(1)}` : ` - ${Math.abs(p.d).toFixed(1)}`);
 
     eqElement.innerHTML = `$g(n) = ${aStr} \\cdot \\log_{${bStr}}${cStr}${dStr}$`;
-    if (window.MathJax) { // Prüfen ob MathJax geladen ist
+    if (window.MathJax) {
          MathJax.typesetPromise([eqElement]).catch(err => console.error('MathJax typesetting error:', err));
     }
 }
@@ -214,7 +214,6 @@ function updateValueDisplays() {
     document.getElementById('valueExpB').textContent = userParamsExp.b.toFixed(1);
     document.getElementById('valueExpD').textContent = userParamsExp.d.toFixed(1);
 
-    // Stelle sicher, dass Log-Elemente existieren (wichtig beim ersten Laden)
     if(document.getElementById('valueLogA')) {
       document.getElementById('valueLogA').textContent = userParamsLog.a.toFixed(1);
       document.getElementById('valueLogB').textContent = userParamsLog.b.toFixed(1);
@@ -224,16 +223,17 @@ function updateValueDisplays() {
 }
 
 // --- Event Listener Setup ---
+// Slider reagieren nur, wenn sie NICHT disabled sind.
 function setupEventListeners() {
     // Exponential Sliders
     document.getElementById('sliderExpA').addEventListener('input', (e) => {
-        if (!stateExp.unlocked.a) return;
+        if (e.target.disabled) return; // Direkt prüfen
         userParamsExp.a = parseFloat(e.target.value);
         updateValueDisplays();
         updateGraphExp();
     });
     document.getElementById('sliderExpB').addEventListener('input', (e) => {
-        if (!stateExp.unlocked.b) return;
+        if (e.target.disabled) return; // Direkt prüfen
         let b_val = parseFloat(e.target.value);
         if (Math.abs(b_val - 1) < 0.05) {
             b_val = b_val < 1 ? 0.9 : 1.1;
@@ -244,33 +244,33 @@ function setupEventListeners() {
         updateGraphExp();
     });
      document.getElementById('sliderExpD').addEventListener('input', (e) => {
-        if (!stateExp.unlocked.d) return;
+         if (e.target.disabled) return; // Direkt prüfen
         userParamsExp.d = parseFloat(e.target.value);
         updateValueDisplays();
         updateGraphExp();
     });
 
-     // Logarithmisch Sliders
+     // Logarithmisch Sliders (analog)
     document.getElementById('sliderLogA').addEventListener('input', (e) => {
-        if (!stateLog.unlocked.a) return;
+        if (e.target.disabled) return; // Direkt prüfen
         userParamsLog.a = parseFloat(e.target.value);
         updateValueDisplays();
         updateGraphLog();
     });
     document.getElementById('sliderLogB').addEventListener('input', (e) => {
-        if (!stateLog.unlocked.b) return;
-        userParamsLog.b = parseFloat(e.target.value); // Min ist 1.1, also > 0 und != 1 sichergestellt
+        if (e.target.disabled) return; // Direkt prüfen
+        userParamsLog.b = parseFloat(e.target.value);
         updateValueDisplays();
         updateGraphLog();
     });
     document.getElementById('sliderLogC').addEventListener('input', (e) => {
-        if (!stateLog.unlocked.c) return;
+        if (e.target.disabled) return; // Direkt prüfen
         userParamsLog.c = parseFloat(e.target.value);
         updateValueDisplays();
         updateGraphLog();
     });
      document.getElementById('sliderLogD').addEventListener('input', (e) => {
-        if (!stateLog.unlocked.d) return;
+        if (e.target.disabled) return; // Direkt prüfen
         userParamsLog.d = parseFloat(e.target.value);
         updateValueDisplays();
         updateGraphLog();
@@ -282,19 +282,18 @@ function setupEventListeners() {
 // Zeigt Fragen für den aktuellen Parameter an
 function displayQuestions(type) {
     const state = (type === 'exp') ? stateExp : stateLog;
-    const typePrefix = type.charAt(0).toUpperCase() + type.slice(1); // 'Exp' or 'Log'
+    const typePrefix = type.charAt(0).toUpperCase() + type.slice(1);
     const questionsContainer = document.getElementById(`questions${typePrefix}`);
     const feedbackContainer = document.getElementById(`feedback${typePrefix}`);
 
-    if (!questionsContainer || !feedbackContainer) return; // Element nicht gefunden
+    if (!questionsContainer || !feedbackContainer) return;
 
-    questionsContainer.innerHTML = ''; // Alte Fragen löschen
-    feedbackContainer.innerHTML = ''; // Altes Feedback löschen
+    questionsContainer.innerHTML = '';
+    feedbackContainer.innerHTML = '';
 
     const param = state.currentParam;
-    if (!param || !questions[type][param]) {
-        // Alle Parameter freigeschaltet oder Fehler
-        questionsContainer.innerHTML = '<p>Alle Parameter für diesen Teil sind freigeschaltet!</p>';
+    if (!param) { // Kein aktueller Parameter mehr für diesen Typ
+        questionsContainer.innerHTML = '<p>Sehr gut! Alle Parameter für diesen Teil wurden bearbeitet.</p>';
         if (window.MathJax) {
             MathJax.typesetPromise([questionsContainer]).catch(err => console.error('MathJax typesetting error:', err));
         }
@@ -302,7 +301,7 @@ function displayQuestions(type) {
         if (type === 'exp') {
             const logSim = document.getElementById('logSimulation');
             if (logSim) logSim.style.display = 'block';
-            initializeParameterState('log');
+            initializeParameterState('log'); // Starte Log-Teil
             updateEquationDisplayLog(); // Initiale Log-Gleichung anzeigen
         } else {
             const conclusion = document.getElementById('conclusion');
@@ -312,9 +311,14 @@ function displayQuestions(type) {
         return;
     }
 
-     // Füge die Fragen hinzu
-     const paramQuestions = questions[type][param];
-     let questionsHTML = '';
+    // Es gibt einen aktuellen Parameter, zeige die Fragen dafür an
+    const paramQuestions = questions[type][param];
+    if (!paramQuestions) {
+        console.error(`Keine Fragen für Parameter ${type} - ${param} gefunden.`);
+        return;
+    }
+
+     let questionsHTML = `<h4>Fragen zu Parameter $${param}$</h4>`; // Titel für Fragenset
      paramQuestions.forEach((qData, index) => {
          questionsHTML += `<div class="question-block">`;
          questionsHTML += `<p>Frage ${index + 1}: ${qData.q}</p>`; // Frage mit LaTeX
@@ -332,7 +336,7 @@ function displayQuestions(type) {
 
     // Button zum Absenden hinzufügen
      const submitButton = document.createElement('button');
-     submitButton.textContent = 'Antworten überprüfen';
+     submitButton.textContent = `Antworten für Parameter $${param}$ überprüfen`; // LaTeX im Button-Text
      submitButton.classList.add('submit-answer-btn');
      submitButton.onclick = () => checkAnswers(type);
      questionsContainer.appendChild(submitButton);
@@ -343,7 +347,7 @@ function displayQuestions(type) {
      }
 }
 
-// Überprüft die gegebenen Antworten
+// Überprüft die gegebenen Antworten für den aktuellen Parameter
 function checkAnswers(type) {
     const state = (type === 'exp') ? stateExp : stateLog;
     const typePrefix = type.charAt(0).toUpperCase() + type.slice(1);
@@ -353,7 +357,7 @@ function checkAnswers(type) {
     let correctCount = 0;
     let allAnswered = true;
 
-    if (!param || !paramQuestions || !feedbackContainer) return; // Abbruch, wenn etwas fehlt
+    if (!param || !paramQuestions || !feedbackContainer) return;
 
     paramQuestions.forEach((qData, index) => {
         const radios = document.querySelectorAll(`input[name="q_${type}_${param}_${index}"]`);
@@ -375,70 +379,71 @@ function checkAnswers(type) {
     });
 
     const feedbackElement = document.createElement('p');
-    feedbackContainer.innerHTML = ''; // Altes Feedback löschen
+    feedbackContainer.innerHTML = '';
 
     if (!allAnswered) {
          feedbackElement.innerHTML = 'Bitte beantworte beide Fragen.';
          feedbackContainer.className = 'feedback-section feedback-incorrect';
          feedbackContainer.appendChild(feedbackElement);
     } else if (correctCount === paramQuestions.length) {
-         feedbackElement.innerHTML = `Korrekt! Parameter $${param}$ erfolgreich analysiert. Der nächste Parameter wird vorbereitet.`;
+         feedbackElement.innerHTML = `Korrekt! Die Fragen zu Parameter $${param}$ sind beantwortet. Der nächste Parameter wird vorbereitet.`;
          feedbackContainer.className = 'feedback-section feedback-correct';
          feedbackContainer.appendChild(feedbackElement);
-         state.correctAnswers = 2;
-         unlockNextParameter(type); // Nur bei Erfolg freischalten
+         state.correctAnswers = 2; // Mark as completed
+         unlockNextParameter(type); // Gehe zum nächsten Parameter über
     } else {
         feedbackElement.innerHTML = `Leider nicht ganz richtig (${correctCount} von ${paramQuestions.length}). Versuche es erneut!`;
         feedbackContainer.className = 'feedback-section feedback-incorrect';
         feedbackContainer.appendChild(feedbackElement);
     }
 
-    // MathJax für das Feedback aufrufen (falls LaTeX verwendet wird)
     if (window.MathJax) {
        MathJax.typesetPromise([feedbackContainer]).catch(err => console.error('MathJax typesetting error:', err));
     }
 }
 
-// Schaltet den nächsten Parameter frei
+// Aktiviert den nächsten Parameter und dessen Slider, nachdem der aktuelle beantwortet wurde
 function unlockNextParameter(type) {
     const state = (type === 'exp') ? stateExp : stateLog;
     const paramsOrder = (type === 'exp') ? ['a', 'b', 'd'] : ['a', 'b', 'c', 'd'];
     const currentParamIndex = paramsOrder.indexOf(state.currentParam);
     const typePrefix = type.charAt(0).toUpperCase() + type.slice(1);
 
-    if (state.currentParam === null) return; // Bereits fertig
+    if (state.currentParam === null || currentParamIndex === -1) return; // Sollte nicht passieren, aber sicher ist sicher
 
-    // Aktuellen Slider nun *sicher* freischalten
-    const currentSliderId = `slider${typePrefix}${state.currentParam.toUpperCase()}`;
-    const currentSlider = document.getElementById(currentSliderId);
-     if(currentSlider) currentSlider.disabled = false;
+    // Optional: Den gerade beantworteten Slider deaktivieren
+    // const currentSliderId = `slider${typePrefix}${state.currentParam.toUpperCase()}`;
+    // const currentSlider = document.getElementById(currentSliderId);
+    // if(currentSlider) currentSlider.disabled = true;
 
     if (currentParamIndex < paramsOrder.length - 1) {
+        // Es gibt einen nächsten Parameter
         const nextParam = paramsOrder[currentParamIndex + 1];
-        state.unlocked[nextParam] = true; // Logisch freischalten
-        state.currentParam = nextParam;
-        state.correctAnswers = 0;
 
-        // Slider für nächsten Parameter bleibt disabled (wird erst nach korrekter Antwort auf dessen Fragen enabled)
+        // Aktiviere den Slider des nächsten Parameters
         const nextSliderId = `slider${typePrefix}${nextParam.toUpperCase()}`;
         const nextSlider = document.getElementById(nextSliderId);
-        if(nextSlider) nextSlider.disabled = true;
+        if(nextSlider) nextSlider.disabled = false; // Nächsten Slider aktivieren!
 
-        // Kurze Verzögerung, bevor neue Fragen kommen
-        setTimeout(() => {
-            displayQuestions(type);
-        }, 1500); // 1.5 Sekunden
+        // Setze den nächsten Parameter als aktuellen
+        state.currentParam = nextParam;
+        state.correctAnswers = 0; // Reset für die neuen Fragen
+
+        // Zeige Fragen für den neuen aktuellen Parameter an
+        setTimeout(() => { // Kurze Pause, damit Feedback gelesen werden kann
+             displayQuestions(type);
+        }, 1000); // 1 Sekunde
 
     } else {
-        // Letzter Parameter wurde freigeschaltet
-        state.currentParam = null; // Kein Parameter mehr aktiv für Fragen
-        setTimeout(() => {
-            displayQuestions(type); // Zeigt Abschlussnachricht für diesen Teil
-        }, 1500);
+        // Letzter Parameter wurde beantwortet -> Aktuellen Parameter auf null setzen
+        state.currentParam = null;
+        setTimeout(() => { // Kurze Pause
+            displayQuestions(type); // Ruft die Abschlusslogik auf (startet nächsten Teil oder zeigt Conclusion)
+        }, 1000);
     }
 }
 
-// Initialisiert den Zustand für einen Typ (exp oder log)
+// Initialisiert den Zustand für einen Typ (exp oder log): Erster Slider aktiv, Rest disabled
 function initializeParameterState(type) {
     const state = (type === 'exp') ? stateExp : stateLog;
     const paramsOrder = (type === 'exp') ? ['a', 'b', 'd'] : ['a', 'b', 'c', 'd'];
@@ -448,14 +453,14 @@ function initializeParameterState(type) {
         const sliderId = `slider${typePrefix}${param.toUpperCase()}`;
         const sliderElement = document.getElementById(sliderId);
         if (sliderElement) {
-             sliderElement.disabled = (index !== 0); // Nur der erste ist enabled
+             // Nur der Slider für den ersten Parameter ist initial aktiviert
+             sliderElement.disabled = (index !== 0);
         }
-        state.unlocked[param] = (index === 0);
     });
 
-     state.currentParam = paramsOrder[0];
+     state.currentParam = paramsOrder[0]; // Setze den ersten Parameter als aktuell
      state.correctAnswers = 0;
-     displayQuestions(type); // Zeige Fragen für den ersten Parameter an
+     displayQuestions(type); // Zeige Fragen für den ersten (jetzt aktiven) Parameter an
 }
 
 // Zeichnet den abschließenden Vergleichsgraphen
@@ -464,7 +469,7 @@ function drawComparisonGraph() {
      const finalLogParams = { ...userParamsLog };
      const graphCompareDiv = document.getElementById('graphCompare');
 
-     if (!graphCompareDiv) return; // Element nicht gefunden
+     if (!graphCompareDiv) return;
 
      // Vereinfachte Funktionen für den Vergleich
      const traceExpCompare = {
@@ -499,7 +504,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeGraphs();
     updateValueDisplays();
     updateEquationDisplayExp(); // Initiale Exp-Gleichung rendern
-    // Log-Gleichung wird erst initialisiert, wenn der Teil sichtbar wird
     setupEventListeners();
     initializeParameterState('exp'); // Starte mit Exponentialfunktion
 });
