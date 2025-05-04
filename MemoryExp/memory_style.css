@@ -44,7 +44,7 @@ h1, h2, h3 {
     border-radius: 4px;
 }
 
-/* NEU: Styling für Schwierigkeitsauswahl */
+/* Styling für Schwierigkeitsauswahl */
 #difficultySelection label {
     margin-right: 15px; /* Abstand zwischen Optionen */
     font-weight: normal; /* Normales Gewicht für Radio-Labels */
@@ -210,10 +210,10 @@ h1, h2, h3 {
     margin: 30px auto 20px auto;
     padding: 15px;
     background-color: #fff;
-    border: 2px solid #6c757d; /* Grauer Rand */
+    border: 2px solid #6c757d;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    max-width: 1000px; /* Gleiche Breite wie Spielbrett */
+    max-width: 1000px;
 }
 
 #enlargedViewArea h3 {
@@ -222,45 +222,41 @@ h1, h2, h3 {
 }
 
 .enlarged-content {
-    display: flex; /* Slots nebeneinander */
+    display: flex;
     justify-content: space-around;
-    align-items: stretch; /* Slots gleich hoch machen */
+    align-items: stretch;
     gap: 20px;
     flex-wrap: wrap;
 }
 
 .enlarged-slot {
-    flex: 1; /* Nimmt Platz ein */
-    min-width: 350px; /* Mindestbreite für Lesbarkeit */
-    min-height: 350px; /* Mindesthöhe für Graphen */
+    flex: 1;
+    min-width: 350px;
+    min-height: 350px;
     padding: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #f8f9fa;
-    display: flex; /* Zentrierung des Inhalts im Slot */
+    display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Inhalt darf nicht überlaufen */
-    transition: background-color 0.3s ease; /* Sanfter Übergang beim Leeren */
+    overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
-/* Styling, wenn Slot leer ist (optional) */
 .enlarged-slot:empty {
-    background-color: #e9ecef; /* Etwas dunkler, wenn leer */
+    background-color: #e9ecef;
 }
 
-
-/* Spezifisches Styling, wenn der Slot eine Gleichung enthält */
 .enlarged-slot.contains-equation {
      font-size: 1.4em;
      font-weight: bold;
      text-align: center;
 }
 
-/* Spezifisches Styling, wenn der Slot einen Graph enthält */
 .enlarged-slot.contains-graph {
-    padding: 0; /* Kein Padding, damit Graph vollflächig ist */
+    padding: 0;
 }
 
 .enlarged-slot .js-plotly-plot,
@@ -271,6 +267,62 @@ h1, h2, h3 {
 .enlarged-slot .svg-container {
      width: 100% !important;
      height: 100% !important;
+}
+
+/* NEU: Bereich für gefundene Paare */
+#matchedPairsArea {
+    margin: 40px auto 20px auto; /* Mehr Abstand nach oben */
+    padding: 15px;
+    background-color: #e2f0d9; /* Heller Grünton */
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    max-width: 1000px;
+}
+
+#matchedPairsArea h2 {
+    margin-top: 0;
+    color: #388e3c; /* Dunkleres Grün */
+}
+
+#matchedPairsList {
+    display: flex;
+    flex-wrap: wrap; /* Paare umbrechen lassen */
+    gap: 15px; /* Abstand zwischen den Paaren */
+    justify-content: center; /* Paare zentrieren */
+}
+
+/* NEU: Styling für ein einzelnes gefundenes Paar */
+.matched-pair-item {
+    background-color: #fff;
+    border: 1px solid #a5d6a7; /* Heller grüner Rand */
+    border-radius: 6px;
+    padding: 10px;
+    width: 260px; /* Feste Breite für ein Paar */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column; /* Graph über Gleichung */
+    align-items: center;
+}
+
+.matched-pair-graph {
+    width: 240px; /* Breite des Graphen im Paar */
+    height: 180px; /* Höhe des Graphen im Paar */
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.matched-pair-equation {
+    font-size: 0.9em; /* Kleinere Schrift für die Gleichung im Paar */
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+/* Plotly im gefundenen Paar */
+.matched-pair-graph .js-plotly-plot,
+.matched-pair-graph .plotly {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 
