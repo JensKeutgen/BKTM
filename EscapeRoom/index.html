@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room: Stromnetz-Kollaps</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #1a1a2e; /* Dunkelblau-Lila */
+            color: #e0e0e0; /* Helles Grau */
+        }
+        .terminal-green { color: #39ff14; } /* Leuchtendes Grün */
+        .terminal-blue { color: #00bfff; } /* Helles Blau */
+        .terminal-red { color: #ff4d4d; } /* Helles Rot */
+        .terminal-yellow { color: #ffff00; } /* Gelb */
+
+        .puzzle-node {
+            border: 2px solid #39ff14;
+            padding: 1rem;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 80px; /* Ensure nodes have some height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .puzzle-node.locked {
+            border-color: #555;
+            color: #777;
+            cursor: not-allowed;
+            background-color: #2a2a3e;
+        }
+        .puzzle-node.unlocked:hover {
+            background-color: #2c3e50; /* Dunkelblau bei Hover */
+            box-shadow: 0 0 15px #39ff14;
+        }
+        .puzzle-node.solved {
+            border-color: #00bfff;
+            background-color: #1f2a38; /* Etwas helleres Dunkelblau */
+            color: #00bfff;
+        }
+        .puzzle-node.solved:hover {
+            box-shadow: 0 0 15px #00bfff;
+        }
+        input[type="text"], input[type="number"], select {
+            background-color: #2a2a3e;
+            border: 1px solid #39ff14;
+            color: #e0e0e0;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        button {
+            background-color: #39ff14;
+            color: #1a1a2e;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #2aa00f; /* Dunkleres Grün */
+        }
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        canvas {
+            background-color: #0d0d1e; /* Sehr dunkles Blau für Canvas */
+            border: 1px solid #39ff14;
+            border-radius: 0.25rem;
+            margin-top: 1rem;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #1a1a2e;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 2px solid #39ff14;
+            text-align: center;
+            max-width: 90%;
+            width: 450px; /* Increased width for more content */
+        }
+        .graph-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .graph-label {
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+        .quiz-question {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px dashed #00bfff;
+            border-radius: 0.25rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div id="main-container" class="max-w-5xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold terminal-green">SYSTEMSTÖRUNG DETEKTIERT</h1>
+            <p class="text-lg terminal-blue mt-2">Notfallprotokoll: Wiederherstellung des Stromnetzes</p>
+        </header>
+
+        <div id="story-log" class="mb-6 p-4 border-2 border-dashed border-terminal-yellow rounded-lg bg-black bg-opacity-30 max-h-48 overflow-y-auto">
+            <p class="font-bold terminal-yellow mb-2">LOGBUCH:</p>
+            </div>
+
+        <div id="dashboard-view" class="mb-8">
+            <h2 class="text-2xl font-bold terminal-green mb-4">SYSTEM-DASHBOARD</h2>
+            <div id="puzzle-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+        </div>
+        
+        <div id="progress-bar-container" class="mb-8">
+            <div class="w-full bg-gray-700 rounded-full h-6">
+                <div id="progress-bar" class="bg-terminal-green h-6 rounded-full text-center text-black font-bold" style="width: 0%;">0%</div>
+            </div>
+        </div>
+
+        <div id="puzzle-view" class="p-6 border-2 border-terminal-green rounded-lg bg-black bg-opacity-50 hidden">
+            </div>
+
+        <div id="final-success-message" class="hidden text-center mt-12 p-8 bg-terminal-blue text-1a1a2e rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-4">SYSTEM WIEDERHERGESTELLT!</h2>
+            <p class="text-xl">Hervorragende Arbeit, Agent! Sie haben das Stromnetz stabilisiert und den Hackerangriff abgewehrt. Die Energieversorgung ist gesichert.</p>
+            <img src="https://placehold.co/300x200/39ff14/1a1a2e?text=Mission+Erfolgreich" alt="Erfolgsbild" class="mx-auto my-4 rounded">
+        </div>
+    </div>
+
+    <div id="feedback-modal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modal-message" class="text-lg mb-4"></p>
+            <button id="modal-close-button">Schließen</button>
+        </div>
+    </div>
+
+    <script>
+        // Globale Elemente
+        const storyLogElement = document.getElementById('story-log');
+        const puzzleGridElement = document.getElementById('puzzle-grid');
+        const puzzleViewElement = document.getElementById('puzzle-view');
+        const dashboardViewElement = document.getElementById('dashboard-view');
+        const finalSuccessMessageElement = document.getElementById('final-success-message');
+        const feedbackModalElement = document.getElementById('feedback-modal');
+        const modalMessageElement = document.getElementById('modal-message');
+        const modalCloseButton = document.getElementById('modal-close-button');
+        const progressBarElement = document.getElementById('progress-bar');
+
+        // Spielzustand
+        let gameState = {
+            puzzles: {
+                p1_freq:      { id: 'p1_freq', name: "P1: Notfrequenz", status: 'unlocked', answer: '50', value: null, unlocks: ['p2_amp', 'p6_slope', 'p8_bigo'] },
+                p2_amp:       { id: 'p2_amp', name: "P2: Amplitudenkalibrierung", status: 'locked', answerValue: 325, value: null, dependsOn: ['p1_freq'], unlocks: ['p3_period'] },
+                p3_period:    { id: 'p3_period', name: "P3: Frequenzsynchronisation", status: 'locked', answerValue: 314.16, value: null, dependsOn: ['p2_amp'], unlocks: ['p4_period_analysis', 'p5_match'] },
+                
+                p4_period_analysis: { id: 'p4_period_analysis', name: "P4: Perioden-Analyse", status: 'locked', answers: ['157.08', '50pi', '50*pi'], value: null, dependsOn: ['p3_period'], unlocks: ['p11_amplitude_glitch'] },
+                
+                p5_match:     { id: 'p5_match', name: "P5: Signalanomalien", status: 'locked', solved: false, correctMatches: {g1: 'eq_amp', g2: 'eq_freq', g3: 'eq_shift'}, dependsOn: ['p3_period'], unlocks: [] },
+                p6_slope:     { id: 'p6_slope', name: "P6: Lineare Schlüssel", status: 'locked', answer: '3', value: null, dependsOn: ['p1_freq'], unlocks: ['p7_quad'] },
+                p7_quad:      { id: 'p7_quad', name: "P7: Überlast-Peak", status: 'locked', answer: '3', value: null, dependsOn: ['p6_slope'], unlocks: [] },
+                p8_bigo:      { id: 'p8_bigo', name: "P8: Skript-Komplexität", status: 'locked', answer: 'o(n^2)', value: null, dependsOn: ['p1_freq'], unlocks: ['p9_intersect'] },
+                
+                p9_intersect: { id: 'p9_intersect', name: "P9: Effizienz-Crossover", status: 'locked', answer: '32', value: null, dependsOn: ['p8_bigo'], unlocks: [] }, // Antwort auf 32 geändert
+                
+                p11_amplitude_glitch: { id: 'p11_amplitude_glitch', name: "P11: Amplituden-Störung", status: 'locked', answer: '25', value: null, dependsOn: ['p4_period_analysis'], unlocks: ['p12_phase_code'] },
+                p12_phase_code: { id: 'p12_phase_code', name: "P12: Phasen-Code", status: 'locked', answer: 'b', value: null, dependsOn: ['p11_amplitude_glitch'], unlocks: [] },
+
+                p10_final:    { 
+                    id: 'p10_final', 
+                    name: "P10: System-Override", 
+                    status: 'locked', 
+                    // Die direkte 'answer' hier ist nur ein Fallback, die eigentliche Prüfung erfolgt gegen dynamisch zusammengesetzte Werte
+                    answer: '50332', // Basierend auf P1=50, P7=3, P9=32
+                    dependsOnValuesFrom: ['p1_freq', 'p7_quad', 'p9_intersect'], 
+                    // P10 wird freigeschaltet, wenn ALLE anderen Rätsel gelöst sind.
+                    dependsOn: ['p1_freq', 'p2_amp', 'p3_period', 'p4_period_analysis', 'p5_match', 'p6_slope', 'p7_quad', 'p8_bigo', 'p9_intersect', 'p11_amplitude_glitch', 'p12_phase_code']
+                }
+            },
+            currentPuzzleId: null,
+            totalPuzzles: 12, // Erhöht auf 12
+            solvedPuzzlesCount: 0
+        };
+
+        function addLogEntry(message, type = 'info') {
+            const p = document.createElement('p');
+            p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            if (type === 'error') p.classList.add('terminal-red');
+            else if (type === 'success') p.classList.add('terminal-green');
+            else if (type === 'system') p.classList.add('terminal-blue');
+            else p.classList.add('text-gray-400'); 
+            storyLogElement.appendChild(p);
+            storyLogElement.scrollTop = storyLogElement.scrollHeight;
+        }
+
+        function showModal(message, type = 'info') {
+            modalMessageElement.textContent = message;
+            modalMessageElement.className = 'text-lg mb-4'; 
+            if (type === 'success') modalMessageElement.classList.add('terminal-green');
+            else if (type === 'error') modalMessageElement.classList.add('terminal-red');
+            else modalMessageElement.classList.add('terminal-yellow');
+            
+            feedbackModalElement.classList.remove('hidden');
+        }
+        modalCloseButton.onclick = () => feedbackModalElement.classList.add('hidden');
+
+        function updateProgress() {
+            // Zähle alle Rätsel außer P10 für den allgemeinen Fortschritt
+            const nonFinalPuzzles = Object.values(gameState.puzzles).filter(p => p.id !== 'p10_final');
+            const solvedNonFinalCount = nonFinalPuzzles.filter(p => p.status === 'solved' || p.solved === true).length;
+            
+            // P10 zählt erst, wenn es selbst gelöst ist
+            let totalSolvedForBar = solvedNonFinalCount;
+            if (gameState.puzzles.p10_final.status === 'solved') {
+                totalSolvedForBar++;
+            }
+            
+            gameState.solvedPuzzlesCount = totalSolvedForBar;
+
+            const progressPercentage = Math.round((gameState.solvedPuzzlesCount / gameState.totalPuzzles) * 100);
+            progressBarElement.style.width = `${progressPercentage}%`;
+            progressBarElement.textContent = `${progressPercentage}%`;
+
+            if (gameState.puzzles.p10_final.status === 'solved') {
+                dashboardViewElement.classList.add('hidden');
+                puzzleViewElement.classList.add('hidden');
+                finalSuccessMessageElement.classList.remove('hidden');
+                addLogEntry("SYSTEM VOLLSTÄNDIG WIEDERHERGESTELLT. PROTOKOLL ENDE.", 'success');
+            }
+        }
+
+        function unlockPuzzles(solvedPuzzleId) {
+            const solvedPuzzle = gameState.puzzles[solvedPuzzleId];
+            if (solvedPuzzle && solvedPuzzle.unlocks) {
+                solvedPuzzle.unlocks.forEach(puzzleIdToUnlock => {
+                    const puzzleToUnlock = gameState.puzzles[puzzleIdToUnlock];
+                    if (puzzleToUnlock && puzzleToUnlock.status === 'locked') {
+                        // Standard-Abhängigkeitsprüfung
+                        let allDepsMet = true;
+                        if (puzzleToUnlock.dependsOn && !puzzleToUnlock.id.startsWith('p10')) { // P10 hat spezielle Logik
+                            allDepsMet = puzzleToUnlock.dependsOn.every(depId => {
+                                const depPuzzle = gameState.puzzles[depId];
+                                return depPuzzle.status === 'solved' || depPuzzle.solved === true;
+                            });
+                        }
+                        if (allDepsMet) {
+                             // Spezielle Freischaltlogik für P10
+                            if (puzzleToUnlock.id === 'p10_final') {
+                                const allOtherPuzzlesSolved = Object.values(gameState.puzzles)
+                                    .filter(p => p.id !== 'p10_final')
+                                    .every(p => p.status === 'solved' || p.solved === true);
+                                
+                                if (allOtherPuzzlesSolved) {
+                                    puzzleToUnlock.status = 'unlocked';
+                                    addLogEntry(`Override-Protokoll ${puzzleToUnlock.name} ist jetzt verfügbar! Alle Sub-Systeme stabil.`, 'system');
+                                }
+                            } else {
+                                puzzleToUnlock.status = 'unlocked';
+                                addLogEntry(`Neues Modul freigeschaltet: ${puzzleToUnlock.name}`, 'system');
+                            }
+                        }
+                    }
+                });
+            }
+             // Nach jedem gelösten Rätsel prüfen, ob P10 freigeschaltet werden kann
+            const p10 = gameState.puzzles.p10_final;
+            if (p10.status === 'locked') {
+                const allOtherPuzzlesSolved = Object.values(gameState.puzzles)
+                    .filter(p => p.id !== 'p10_final')
+                    .every(p => p.status === 'solved' || p.solved === true);
+                
+                if (allOtherPuzzlesSolved) {
+                    p10.status = 'unlocked';
+                    addLogEntry(`Override-Protokoll ${p10.name} ist jetzt verfügbar! Alle Sub-Systeme stabil.`, 'system');
+                }
+            }
+        }
+        
+        function renderDashboard() {
+            puzzleGridElement.innerHTML = '';
+            Object.values(gameState.puzzles).forEach(puzzle => {
+                const node = document.createElement('div');
+                node.classList.add('puzzle-node', puzzle.status);
+                node.textContent = puzzle.name;
+                node.dataset.puzzleId = puzzle.id;
+
+                if (puzzle.status === 'unlocked' || puzzle.status === 'solved') {
+                    node.onclick = () => loadPuzzle(puzzle.id);
+                }
+                puzzleGridElement.appendChild(node);
+            });
+            updateProgress();
+        }
+
+        function loadPuzzle(puzzleId) {
+            gameState.currentPuzzleId = puzzleId;
+            const puzzle = gameState.puzzles[puzzleId];
+            puzzleViewElement.innerHTML = '';
+            
+            if (puzzle.status === 'solved' && puzzle.id !== 'p10_final') { // Allow re-viewing P10 even if solved, for the log hint
+                 puzzleViewElement.innerHTML = `
+                    <h3 class="text-2xl font-bold terminal-green mb-4">${puzzle.name}</h3>
+                    <p class="terminal-blue">Dieses Modul wurde bereits erfolgreich bearbeitet.</p>
+                    <p class="mt-2">Gespeicherter Wert: ${puzzle.value !== null ? puzzle.value : (puzzle.solved === true ? 'Abgeschlossen' : 'N/A')}</p>
+                    <button onclick="showDashboard()" class="mt-4">Zurück zum Dashboard</button>
+                `;
+                puzzleViewElement.classList.remove('hidden');
+                dashboardViewElement.classList.add('hidden');
+                return;
+            }
+            if (puzzle.status === 'locked') {
+                showModal("Zugriff verweigert. Abhängigkeiten nicht erfüllt oder vorherige Systeme nicht stabil.", "error");
+                return;
+            }
+
+            let puzzleHTML = `<h3 class="text-2xl font-bold terminal-green mb-4">${puzzle.name}</h3>`;
+
+            switch (puzzleId) {
+                case 'p1_freq':
+                    puzzleHTML += `
+                        <p>System offline. Kritischer Alarm: Frequenzabweichung im Hauptnetz. Stellen Sie die Nennfrequenz wieder her, um initialen Systemzugriff zu erlangen. Geben Sie die Standard-Netzfrequenz in Europa (in Hertz) ein.</p>
+                        <input type="number" id="p1_answer" placeholder="Frequenz in Hz">
+                        <button onclick="submitAnswer('p1_freq', document.getElementById('p1_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p2_amp':
+                    puzzleHTML += `
+                        <p>Zugriff gewährt. Primäre Spannungswellenform korrumpiert. Amplitude ist instabil. Kalibrieren Sie die Spitzenamplitude A für y = A sin(ωt) auf 325V. Die Basisfrequenz ist vorerst stabil.</p>
+                        <canvas id="p2_canvas" width="400" height="200"></canvas>
+                        <label for="p2_slider_amp">Amplitude A: <span id="p2_amp_value">100</span> V</label>
+                        <input type="range" id="p2_slider_amp" min="0" max="500" value="100" class="w-full mt-2">
+                        <button onclick="submitCanvasAnswer('p2_amp')">Amplitude bestätigen</button>
+                    `;
+                    break;
+                case 'p3_period':
+                     puzzleHTML += `
+                        <p>Amplitude nominal. Korrigieren Sie nun die Kreisfrequenz B (in rad/s) in y = 325 sin(Bx), um der 50Hz Netzfrequenz zu entsprechen. (Erinnerung: ω = 2πf). Geben Sie den Wert für B an (2 Dezimalstellen).</p>
+                        <canvas id="p3_canvas" width="400" height="200"></canvas>
+                        <label for="p3_slider_b">Kreisfrequenz B: <span id="p3_b_value">50</span> rad/s</label>
+                        <input type="range" id="p3_slider_b" min="0" max="500" value="50" step="0.01" class="w-full mt-2">
+                        <p class="mt-2">Alternativ: Geben Sie den berechneten Wert für B direkt ein:</p>
+                        <input type="number" id="p3_answer_b" step="0.01" placeholder="Wert für B">
+                        <button onclick="submitCanvasAnswer('p3_period')">Frequenz bestätigen</button>
+                    `;
+                    break;
+                case 'p4_period_analysis': // Früher p4_phase
+                    puzzleHTML += `
+                        <p>Die Netzfrequenz wird durch den Parameter B in sin(Bx) bestimmt. Wenn eine stabile Periode T = 0.04 Sekunden für ein Subsystem erforderlich ist, welcher Wert für B (in rad/s) ist notwendig? (Hinweis: T = 2π/B). Geben Sie das Ergebnis auf zwei Nachkommastellen gerundet oder als Vielfaches von π (z.B. '50pi') an.</p>
+                        <input type="text" id="p4_answer" placeholder="Wert für B (z.B. 157.08 oder 50pi)">
+                        <button onclick="submitAnswer('p4_period_analysis', document.getElementById('p4_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p5_match':
+                    puzzleHTML += `
+                        <p>Mehrere anomale Signale detektiert. Identifizieren Sie diese, um die Wellenformintegrität zu sichern. Ordnen Sie jedem Graphen seine Gleichung zu.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                            ${generateGraphCanvasHTML('p5_graph1', 'Graph G1')}
+                            ${generateGraphCanvasHTML('p5_graph2', 'Graph G2')}
+                            ${generateGraphCanvasHTML('p5_graph3', 'Graph G3')}
+                        </div>
+                        <div class="space-y-2">
+                            <div><label for="p5_g1_eq">Graph G1 ist:</label> <select id="p5_g1_eq">${getEquationOptionsHTML()}</select></div>
+                            <div><label for="p5_g2_eq">Graph G2 ist:</label> <select id="p5_g2_eq">${getEquationOptionsHTML()}</select></div>
+                            <div><label for="p5_g3_eq">Graph G3 ist:</label> <select id="p5_g3_eq">${getEquationOptionsHTML()}</select></div>
+                        </div>
+                        <button onclick="submitMatchAnswer('p5_match')">Zuordnung prüfen</button>
+                    `;
+                    break;
+                case 'p6_slope':
+                    puzzleHTML += `
+                        <p>Firewall-Modul verwendet einen linearen Schlüssel k(x) = mx + c. Schlüsseldatenpunkte: (x=1, k=5) und (x=3, k=11). Berechnen Sie die Steigung m, um fortzufahren.</p>
+                        <input type="number" id="p6_answer" placeholder="Steigung m">
+                        <button onclick="submitAnswer('p6_slope', document.getElementById('p6_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p7_quad':
+                     puzzleHTML += `
+                        <p>Systemlast L(t) = -2t² + 12t + 50 (t in ms). Zu welcher Zeit t (in ms) erreicht die Last ihren Peak? Dieser Wert ist kritisch für die Override-Sequenz.</p>
+                        <input type="number" id="p7_answer" placeholder="Zeit t in ms">
+                        <button onclick="submitAnswer('p7_quad', document.getElementById('p7_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p8_bigo':
+                    puzzleHTML += `
+                        <p>Wir haben ein verdächtiges Skript isoliert. Seine Ausführungszeit skaliert mit dem Quadrat der Eingabedatenpakete n. Was ist seine Big O Zeitkomplexität?</p>
+                        <select id="p8_answer">
+                            <option value="">Wähle Komplexität...</option>
+                            <option value="O(1)">O(1)</option>
+                            <option value="O(log n)">O(log n)</option>
+                            <option value="O(n)">O(n)</option>
+                            <option value="O(n log n)">O(n log n)</option>
+                            <option value="O(n^2)">O(n^2)</option>
+                            <option value="O(2^n)">O(2^n)</option>
+                        </select>
+                        <button onclick="submitAnswer('p8_bigo', document.getElementById('p8_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p9_intersect':
+                    puzzleHTML += `
+                        <p>Alter Algorithmus des Angreifers: T1(n) = 20n + 600. Unsere neue Verteidigung: T2(n) = n² + 5n + 100. Finden Sie die positive ganze Zahl n (Anzahl der Pakete), bei der T2(n) effizienter oder gleich T1(n) wird. Der gesuchte Wert ist Teil des finalen Codes (siehe Logbuch nach Lösung).</p>
+                        <input type="number" id="p9_answer" placeholder="Anzahl Pakete n">
+                        <button onclick="submitAnswer('p9_intersect', document.getElementById('p9_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p11_amplitude_glitch':
+                    puzzleHTML += `
+                        <p>Ein Störsignal überlagert die Netzspannung. Das Signal ist y_störung = X * sin(t). Der resultierende Maximalwert der Spannung (Netz + Störung) beträgt 350V. Die Netz-Soll-Amplitude ist 325V (siehe Logbuch P2). Wie groß ist die Amplitude X des Störsignals, wenn beide Signale in Phase sind und sich addieren?</p>
+                        <input type="number" id="p11_answer" placeholder="Amplitude X des Störsignals">
+                        <button onclick="submitAnswer('p11_amplitude_glitch', document.getElementById('p11_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p12_phase_code':
+                    puzzleHTML += `
+                        <p>Drei Generatoren müssen synchronisiert werden. Generator A ist die Referenz (sin(ωt)). Generator B eilt Generator A um π/2 voraus. Welcher der folgenden Terme beschreibt Generator B korrekt?</p>
+                        <select id="p12_answer">
+                            <option value="">Wähle Term...</option>
+                            <option value="a">A) sin(ωt - π/2)</option>
+                            <option value="b">B) sin(ωt + π/2)</option>
+                            <option value="c">C) cos(ωt - π/2)</option>
+                            <option value="d">D) sin(ωt + π)</option>
+                        </select>
+                        <p class="text-xs mt-1">(Hinweis: cos(x) = sin(x + π/2))</p>
+                        <button onclick="submitAnswer('p12_phase_code', document.getElementById('p12_answer').value)">Senden</button>
+                    `;
+                    break;
+                case 'p10_final':
+                    puzzleHTML += `
+                        <p>Alle Subsysteme scheinen stabil. Das finale Override-Protokoll erfordert eine Sequenz, die aus kritischen Systemwerten zusammengesetzt ist. Konsultieren Sie das <span class="terminal-yellow">LOGBUCH</span> für die benötigten Werte:</p>
+                        <ul class="list-disc list-inside my-2 terminal-yellow">
+                            <li>Notfrequenz (aus P1)</li>
+                            <li>Peak Last Zeit (aus P7)</li>
+                            <li>Effizienz Crossover Punkt (aus P9)</li>
+                        </ul>
+                        <p>Stellen Sie sicher, dass alle anderen Systeme (insbesondere P5 Signalanomalien, P4 Perioden-Analyse, P11 Amplituden-Störung, P12 Phasen-Code) als 'gelöst' im Dashboard markiert sind.</p>
+                        <p class="mt-2">Geben Sie die zusammengesetzte Sequenz ein (z.B. wenn Werte 11, 22, 33 sind, dann '112233').</p>
+                        <input type="text" id="p10_answer" placeholder="Finale Sequenz aus Logbuch-Werten">
+                        <button onclick="submitFinalAnswer('p10_final', document.getElementById('p10_answer').value)">Override Initiieren</button>
+                    `;
+                    if (puzzle.status === 'solved') {
+                         puzzleHTML += `<p class="terminal-green mt-4">System-Override bereits erfolgreich durchgeführt mit Code: ${puzzle.value}</p>`;
+                    }
+                    break;
+                default:
+                    puzzleHTML += "<p>Fehler: Rätsel nicht gefunden.</p>";
+            }
+            puzzleHTML += `<button onclick="showDashboard()" class="ml-2 bg-terminal-blue text-black">Dashboard</button>`;
+            puzzleViewElement.innerHTML = puzzleHTML;
+
+            if (puzzleId === 'p2_amp') initP2Canvas();
+            if (puzzleId === 'p3_period') initP3Canvas();
+            if (puzzleId === 'p5_match') initP5Canvases();
+
+
+            puzzleViewElement.classList.remove('hidden');
+            dashboardViewElement.classList.add('hidden');
+            addLogEntry(`Modul ${puzzle.name} geladen.`, 'info');
+        }
+        
+        function generateGraphCanvasHTML(canvasId, label) {
+            return `
+                <div class="graph-container">
+                    <canvas id="${canvasId}" width="250" height="150"></canvas>
+                    <span class="graph-label">${label}</span>
+                </div>
+            `;
+        }
+
+        function getEquationOptionsHTML() {
+            return `
+                <option value="">Wähle Gleichung...</option>
+                <option value="eq_amp">y = 2sin(x)</option>
+                <option value="eq_freq">y = sin(2x)</option>
+                <option value="eq_shift">y = sin(x) + 1</option>
+            `;
+        }
+        
+        function drawSineWave(canvasId, amplitude, frequency, phase, yOffset, color = '#39ff14', targetAmplitude = null, targetFrequency = null) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const midY = height / 2;
+            const midX = width / 20; 
+
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.strokeStyle = '#555';
+            ctx.beginPath();
+            ctx.moveTo(0, midY);
+            ctx.lineTo(width, midY); 
+            ctx.moveTo(midX, 0);
+            ctx.lineTo(midX, height); 
+            ctx.stroke();
+
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let x = 0; x < width - midX; x++) {
+                const angle = (x / (width / 2)) * frequency * Math.PI + phase; 
+                const y = midY - amplitude * Math.sin(angle) - yOffset * (height/10); 
+                if (x === 0) ctx.moveTo(midX + x, y);
+                else ctx.lineTo(midX + x, y);
+            }
+            ctx.stroke();
+
+            if (targetAmplitude !== null && targetFrequency !== null) {
+                ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)'; 
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                for (let x = 0; x < width - midX; x++) {
+                    const angle = (x / (width/2)) * targetFrequency * Math.PI + phase;
+                    const y = midY - targetAmplitude * Math.sin(angle) - yOffset * (height/10);
+                    if (x === 0) ctx.moveTo(midX + x, y);
+                    else ctx.lineTo(midX + x, y);
+                }
+                ctx.stroke();
+            }
+        }
+
+
+        function initP2Canvas() {
+            const slider = document.getElementById('p2_slider_amp');
+            const ampValueDisplay = document.getElementById('p2_amp_value');
+            const targetAmplitude = gameState.puzzles.p2_amp.answerValue; 
+            
+            function updateP2Canvas() {
+                const currentAmp = parseFloat(slider.value);
+                ampValueDisplay.textContent = currentAmp;
+                const displayAmp = currentAmp / (500/80); 
+                const displayTargetAmp = targetAmplitude / (500/80);
+                drawSineWave('p2_canvas', displayAmp, 1, 0, 0, '#39ff14', displayTargetAmp, 1);
+            }
+            slider.oninput = updateP2Canvas;
+            updateP2Canvas();
+        }
+
+        function initP3Canvas() {
+            const sliderB = document.getElementById('p3_slider_b');
+            const bValueDisplay = document.getElementById('p3_b_value');
+            const targetB = gameState.puzzles.p3_period.answerValue; 
+            
+            function updateP3Canvas() {
+                const currentB = parseFloat(sliderB.value);
+                bValueDisplay.textContent = currentB.toFixed(2);
+                const canvasFreqParam = currentB / targetB; 
+                drawSineWave('p3_canvas', 60, canvasFreqParam, 0, 0, '#39ff14', 60, 1); 
+            }
+            sliderB.oninput = updateP3Canvas;
+            updateP3Canvas(); 
+        }
+        
+        function initP5Canvases() {
+            drawSineWave('p5_graph1', 60, 0.5, 0, 0); 
+            drawSineWave('p5_graph2', 30, 1, 0, 0);   
+            drawSineWave('p5_graph3', 30, 0.5, 0, -1.5); 
+        }
+
+
+        function showDashboard() {
+            puzzleViewElement.classList.add('hidden');
+            dashboardViewElement.classList.remove('hidden');
+            gameState.currentPuzzleId = null;
+            renderDashboard();
+        }
+
+        function submitAnswer(puzzleId, answer) {
+            const puzzle = gameState.puzzles[puzzleId];
+            if (!puzzle) return;
+
+            const userAnswer = String(answer).toLowerCase().trim().replace('π', 'pi'); // Ersetze π durch pi für Konsistenz
+            
+            let isCorrect = false;
+            if (puzzle.answer && userAnswer === puzzle.answer.toLowerCase()) {
+                isCorrect = true;
+            } else if (puzzle.answers && puzzle.answers.map(a => a.toLowerCase()).includes(userAnswer)) {
+                isCorrect = true;
+            }
+
+            if (isCorrect) {
+                puzzle.status = 'solved';
+                puzzle.value = answer.trim(); 
+                addLogEntry(`Lösung für ${puzzle.name} ('${answer.trim()}') korrekt. System-Parameter gesichert.`, 'success');
+                // Spezifische Log-Einträge für P10-relevante Werte
+                if (['p1_freq', 'p7_quad', 'p9_intersect'].includes(puzzleId)) {
+                    addLogEntry(`LOGBUCH-UPDATE (${puzzleId.toUpperCase()}): Wert ${puzzle.value} für Override-Sequenz registriert.`, 'system');
+                }
+                if (puzzleId === 'p2_amp') {
+                     addLogEntry(`LOGBUCH-UPDATE (P2): Netz-Soll-Amplitude auf ${puzzle.value}V kalibriert.`, 'system');
+                }
+
+
+                showModal(`Korrekt! ${puzzle.name} abgeschlossen.`, 'success');
+                unlockPuzzles(puzzleId);
+                showDashboard();
+            } else {
+                addLogEntry(`Falsche Eingabe für ${puzzle.name}: ${answer.trim()}`, 'error');
+                showModal("Falsche Antwort. Versuchen Sie es erneut.", 'error');
+            }
+        }
+        
+        function submitCanvasAnswer(puzzleId) {
+            const puzzle = gameState.puzzles[puzzleId];
+            let submittedValue;
+            let isCorrect = false;
+            const tolerance = puzzleId === 'p2_amp' ? 5 : 0.5; 
+
+            if (puzzleId === 'p2_amp') {
+                submittedValue = parseFloat(document.getElementById('p2_slider_amp').value);
+                if (Math.abs(submittedValue - puzzle.answerValue) <= tolerance) {
+                    isCorrect = true;
+                }
+            } else if (puzzleId === 'p3_period') {
+                const directInput = parseFloat(document.getElementById('p3_answer_b').value);
+                const sliderInput = parseFloat(document.getElementById('p3_slider_b').value);
+
+                if (!isNaN(directInput) && Math.abs(directInput - puzzle.answerValue) <= tolerance) {
+                    submittedValue = directInput;
+                    isCorrect = true;
+                } else if (!isNaN(sliderInput) && Math.abs(sliderInput - puzzle.answerValue) <= tolerance * 10) { 
+                    submittedValue = sliderInput;
+                    if (Math.abs(sliderInput - puzzle.answerValue) <= tolerance) isCorrect = true;
+                    else {
+                         showModal(`Slider ist nah dran! Für exakte Eingabe bitte das Textfeld für B benutzen. Ziel: ${puzzle.answerValue.toFixed(2)}`, 'info');
+                         return; 
+                    }
+                } else {
+                     submittedValue = isNaN(directInput) ? sliderInput : directInput; 
+                }
+            }
+
+            if (isCorrect) {
+                puzzle.status = 'solved';
+                puzzle.value = submittedValue.toFixed(puzzleId === 'p3_period' ? 2 : 0);
+                addLogEntry(`Lösung für ${puzzle.name} korrekt: ${puzzle.value}`, 'success');
+                 if (puzzleId === 'p2_amp') { // Spezieller Logeintrag für P2
+                    addLogEntry(`LOGBUCH-UPDATE (P2): Netz-Soll-Amplitude auf ${puzzle.value}V kalibriert.`, 'system');
+                }
+                showModal(`Korrekt! ${puzzle.name} abgeschlossen.`, 'success');
+                unlockPuzzles(puzzleId);
+                showDashboard();
+            } else {
+                addLogEntry(`Falsche Eingabe für ${puzzle.name}: ${submittedValue}`, 'error');
+                showModal(`Antwort für ${puzzle.name} nicht korrekt (Ziel: ${puzzle.answerValue.toFixed(2)}, Ihre Eingabe: ${submittedValue !== undefined && !isNaN(submittedValue) ? submittedValue.toFixed(2) : 'N/A'}). Versuchen Sie es erneut.`, 'error');
+            }
+        }
+
+        function submitMatchAnswer(puzzleId) {
+            const puzzle = gameState.puzzles[puzzleId];
+            const userMatches = {
+                g1: document.getElementById('p5_g1_eq').value,
+                g2: document.getElementById('p5_g2_eq').value,
+                g3: document.getElementById('p5_g3_eq').value,
+            };
+
+            if (userMatches.g1 === puzzle.correctMatches.g1 &&
+                userMatches.g2 === puzzle.correctMatches.g2 &&
+                userMatches.g3 === puzzle.correctMatches.g3) {
+                
+                puzzle.status = 'solved';
+                puzzle.solved = true; 
+                puzzle.value = "Signale korrekt zugeordnet";
+                addLogEntry(`${puzzle.name}: Alle Signale korrekt identifiziert. Wellenformintegrität gesichert.`, 'success');
+                showModal('Korrekt! Alle Graphen richtig zugeordnet.', 'success');
+                unlockPuzzles(puzzleId);
+                showDashboard();
+            } else {
+                addLogEntry(`${puzzle.name}: Falsche Zuordnung.`, 'error');
+                showModal('Falsche Zuordnung. Überprüfen Sie die Amplituden, Frequenzen und Verschiebungen.', 'error');
+            }
+        }
+
+        function submitFinalAnswer(puzzleId, answer) {
+            const puzzle = gameState.puzzles[puzzleId];
+            const p1_val = gameState.puzzles.p1_freq.value;
+            const p7_val = gameState.puzzles.p7_quad.value;
+            const p9_val = gameState.puzzles.p9_intersect.value;
+
+            if (p1_val === null || p7_val === null || p9_val === null ) {
+                showModal("Fehler: Nicht alle erforderlichen Daten für die Override-Sequenz im Logbuch gefunden. Stellen Sie sicher, dass P1, P7 und P9 gelöst sind.", "error");
+                addLogEntry("Finaler Override fehlgeschlagen: Kritische Daten fehlen im Logbuch.", "error");
+                return;
+            }
+             // Überprüfen, ob alle anderen Rätsel gelöst sind
+            const allOthersSolved = Object.values(gameState.puzzles)
+                .filter(p => p.id !== 'p10_final')
+                .every(p => p.status === 'solved' || p.solved === true);
+
+            if (!allOthersSolved) {
+                showModal("Fehler: Nicht alle Subsysteme sind stabil. Bitte lösen Sie zuerst alle anderen Rätsel.", "error");
+                addLogEntry("Finaler Override fehlgeschlagen: Nicht alle Systeme stabilisiert.", "error");
+                return;
+            }
+            
+            const expectedAnswerString = `${p1_val}${p7_val}${p9_val}`;
+            const userAnswerString = String(answer).trim();
+
+            if (userAnswerString === expectedAnswerString) { 
+                puzzle.status = 'solved';
+                puzzle.value = userAnswerString;
+                addLogEntry("FINALES OVERRIDE-KOMMANDO AKZEPTIERT. SYSTEMSTABILISIERUNG ERFOLGREICH.", 'success');
+                showModal("Override erfolgreich! System wird wiederhergestellt...", 'success');
+                updateProgress(); 
+            } else {
+                addLogEntry(`Finaler Override Code ${userAnswerString} ist FALSCH. Erwartete Sequenz basierend auf Logbuch-Werten: ${expectedAnswerString}`, 'error');
+                showModal("Falscher Override Code. Systemintegrität gefährdet. Überprüfen Sie die Logbuch-Werte und Ihre Eingabe.", 'error');
+            }
+        }
+
+        // Initialisierung
+        function initializeGame() {
+            addLogEntry("Systemstart... Notfallprotokolle werden geladen.", "system");
+            addLogEntry("WARNUNG: Stromnetz instabil. Hackeraktivität vermutet.", "error");
+            addLogEntry("Ihre Mission: Systemstabilisierung durch Lösen der kryptografischen Modulsperren.", "info");
+            showDashboard();
+        }
+
+        // Spiel starten
+        window.onload = function() {
+            initializeGame();
+        };
+
+    </script>
+</body>
+</html>
